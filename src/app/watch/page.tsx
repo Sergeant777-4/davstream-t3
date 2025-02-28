@@ -19,7 +19,7 @@ const WatchPage = async ({ searchParams }: Props) => {
 
   const media = await mediaAction.getMediaDetails(valid.data.id);
   const players = await playerAction.getDirectLinks({ mediaId: media.id });
-  const file = players?.find((item) => item.type === "direct");
+  const file = players?.find((item) => item.type === "hls");
 
   return (
     <div>
