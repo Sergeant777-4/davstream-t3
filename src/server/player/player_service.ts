@@ -34,7 +34,7 @@ export const DOMAINS = [
 ] as const;
 
 class PlayerService {
-  proxyUrl = env.API_URL;
+  proxyUrl = "https://better-proxy.pridila-2006.workers.dev";
 
   upsert = async (insertData: Prisma.PlayerCreateInput) => {
     return await db.player.upsert({
