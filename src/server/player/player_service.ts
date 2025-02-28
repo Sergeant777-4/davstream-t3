@@ -1,5 +1,4 @@
 import type { Prisma, TypeEnum } from "@prisma/client";
-import { env } from "~/env";
 import { db } from "~/server/db";
 
 export const DOMAINS = [
