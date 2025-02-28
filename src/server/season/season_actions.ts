@@ -11,13 +11,10 @@ class SeasonAction {
     return seasons;
   };
 
-  getSeasonDetails = async (payload: {
-    mediaId: number;
-    seasonNumber: number;
-  }) => {
+  getSeasonDetails = async (payload: { mediaId: number; number: number }) => {
     const schema = z.object({
       mediaId: z.number().int().min(1),
-      seasonNumber: z.number().int().min(1),
+      number: z.number().int().min(1),
     });
 
     const valid = schema.parse(payload);
