@@ -1,4 +1,5 @@
 import type { Prisma, TypeEnum } from "@prisma/client";
+import { env } from "~/env";
 import { db } from "~/server/db";
 
 export const DOMAINS = [
@@ -33,7 +34,7 @@ export const DOMAINS = [
 ] as const;
 
 class PlayerService {
-  proxyUrl = "http://127.0.0.1:8787";
+  proxyUrl = env.API_URL;
 
   upsert = async (insertData: Prisma.PlayerCreateInput) => {
     return await db.player.upsert({
