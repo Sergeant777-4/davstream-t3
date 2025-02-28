@@ -1,3 +1,4 @@
+import type { Media } from "@prisma/client";
 import { Star } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -14,7 +15,7 @@ const MediaCard = ({ data }: Props) => {
       <figure className="aspect-[3/4.5] w-full overflow-hidden rounded-md transition-all group-hover:-translate-y-1 group-focus:-translate-y-1">
         <Image
           className="size-full object-cover object-center"
-          src={data.posterPath || "/poster.png"}
+          src={data.posterPath ?? "/poster.png"}
           title={data.title}
           alt={data.title}
           height={500}
