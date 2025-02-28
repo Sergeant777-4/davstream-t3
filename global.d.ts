@@ -61,6 +61,5 @@ type ITmdbImagesResponse = {
 type ExtractedLink = {
   type: string;
   url: string;
-  host: string;
-  referer?: string;
+  ref?: string;
 };

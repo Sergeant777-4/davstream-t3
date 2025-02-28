@@ -33,7 +33,7 @@ export const DOMAINS = [
 ] as const;
 
 class PlayerService {
-  proxyUrl = "https://try-cors.pridila-2006.workers.dev";
+  proxyUrl = "http://127.0.0.1:8787";
 
   upsert = async (insertData: Prisma.PlayerCreateInput) => {
     return await db.player.upsert({
@@ -89,13 +89,13 @@ class PlayerService {
   };
 
   extractDirectLink = async (url: string, host: string) => {
-    const endpoint = `${this.proxyUrl}/extractor/${host}/${encodeURIComponent(url)}`;
+    const endpoint = `${this.proxyUrl}/${host}/${encodeURIComponent(url)}`;
 
     let data: ExtractedLink | null = null;
     const res = await fetch(endpoint);
     data = (await res.json()) as ExtractedLink;
 
-    const directLink = `${this.proxyUrl}/proxy/${data.type}?url=${encodeURIComponent(data.url)}`;
+    const directLink = `${this.proxyUrl}/proxy/${data.type}?url=${encodeURIComponent(data.url)}${data.ref ? "&ref=" + encodeURIComponent(data.ref) : ""}`;
     return { ...data, url: directLink };
   };
 }
