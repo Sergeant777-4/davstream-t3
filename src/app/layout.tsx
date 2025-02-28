@@ -1,4 +1,6 @@
 import "~/styles/globals.css";
+import "@vidstack/react/player/styles/default/theme.css";
+import "@vidstack/react/player/styles/default/layouts/video.css";
 
 import { GeistSans } from "geist/font/sans";
 import { type Metadata } from "next";
@@ -13,7 +15,10 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${GeistSans.variable}`}>
+    <html
+      lang="fr"
+      className={`dark min-h-svh w-screen overflow-x-hidden ${GeistSans.variable}`}
+    >
       <body>{children}</body>
     </html>
   );

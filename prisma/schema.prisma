@@ -1,6 +1,4 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
+// Database configuration
 generator client {
     provider = "prisma-client-js"
 }
@@ -10,11 +8,217 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-model Post {
-    id        Int      @id @default(autoincrement())
-    name      String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+// Enums
+enum CategoryEnum {
+    ANIME
+    KDRAMA
+    DOCUMENTARY
+    CARTOON
+}
 
-    @@index([name])
+enum LanguageEnum {
+    VF
+    VO
+}
+
+enum StatusEnum {
+    ONGOING
+    ENDED
+    CANCELLED
+    ANNOUNCED
+}
+
+enum TypeEnum {
+    MOVIE
+    TV
+}
+
+// Models
+model Media {
+    id        Int      @id @default(autoincrement())
+    tmdbId    Int
+    imdbId    String?  @db.VarChar(50)
+    createAt  DateTime @default(now())
+    updatedAt DateTime @default(now()) @updatedAt
+
+    // Basic information
+    title         String
+    originalTitle String
+    type          TypeEnum
+    category      CategoryEnum?
+    status        StatusEnum    @default(ENDED)
+    overview      String
+    tagline       String?
+
+    // Media details
+    alternativeTitles String?
+    releaseDate       DateTime
+    duration          Int      @default(0)
+    seasonsCount      Int      @default(0)
+    episodesCount     Int      @default(0)
+
+    // Media assets
+    posterPath      String?
+    trailerUrl      String?
+    backdropPath    String?
+    logoPath        String?
+    recommendations Int[]
+    similars        Int[]
+
+    // Statistics
+    tmdbRating Float @default(0)
+    popularity Float @default(0)
+
+    // Flags
+    isAdult    Boolean @default(false)
+    isFeatured Boolean @default(false)
+
+    // Relations
+    players        Player[]
+    seasons        Season[]
+    genres         Genre[]
+    watchProviders WatchProvider[]
+    collection     Collection?     @relation(fields: [collectionId], references: [id])
+    collectionId   Int?
+
+    @@unique([tmdbId, type])
+}
+
+model Season {
+    id        Int      @id @default(autoincrement())
+    tmdbId    Int
+    createAt  DateTime @default(now())
+    updatedAt DateTime @default(now()) @updatedAt
+
+    // Basic information
+    name         String
+    overview     String?
+    number       Int
+    episodeCount Int     @default(0)
+    tmdbRating   Float   @default(0)
+    mediaTmdbId  Int
+
+    // Metadata
+    posterPath  String?
+    releaseDate DateTime
+
+    // Flags
+    isFinalSeason Boolean? @default(false)
+    isAired       Boolean  @default(false)
+
+    // Relations
+    mediaId  Int
+    media    Media     @relation(fields: [mediaId], references: [id], onDelete: Cascade)
+    episodes Episode[]
+
+    @@unique([mediaId, number])
+    @@unique([mediaTmdbId, number])
+}
+
+model Episode {
+    id          Int      @id @default(autoincrement())
+    tmdbId      Int?
+    createAt    DateTime @default(now())
+    updatedAt   DateTime @default(now()) @updatedAt
+    mediaTmdbId Int
+
+    // Basic information
+    summary      String?
+    title        String
+    number       Int
+    seasonNumber Int
+    duration     Int
+    tmdbRating   Float   @default(0)
+
+    // Media assets
+    stillPath String?
+
+    // Dates
+    airDate DateTime
+
+    // Flags
+    isSpecial      Boolean? @default(false)
+    isFinalEpisode Boolean? @default(false)
+    isAired        Boolean  @default(true)
+
+    // Relations
+    seasonId Int
+    season   Season   @relation(fields: [seasonId], references: [id], onDelete: Cascade)
+    players  Player[]
+
+    @@unique([seasonId, number])
+    @@unique([mediaTmdbId, seasonNumber, number])
+}
+
+model Player {
+    id        Int      @id @default(autoincrement())
+    createAt  DateTime @default(now())
+    updatedAt DateTime @default(now()) @updatedAt
+
+    // Basic information
+    host     String?
+    url      String       @unique()
+    language LanguageEnum @default(VF)
+
+    // Flags
+    isWorking Boolean @default(true)
+
+    // Relations
+    mediaId   Int?
+    episodeId Int?
+    episode   Episode? @relation(fields: [episodeId], references: [id], onDelete: Cascade)
+    media     Media?   @relation(fields: [mediaId], references: [id], onDelete: Cascade)
+}
+
+model Genre {
+    id        Int      @id @default(autoincrement())
+    tmdbId    Int      @unique()
+    createAt  DateTime @default(now())
+    updatedAt DateTime @default(now()) @updatedAt
+
+    // Basic information
+    name        String  @unique() @db.VarChar(50)
+    slug        String  @unique() @db.VarChar(60)
+    description String?
+
+    // Metadata
+    logoPath   String?
+    mediaCount Int     @default(0)
+
+    // Relations
+    media Media[]
+}
+
+model WatchProvider {
+    id        Int      @id @default(autoincrement())
+    createAt  DateTime @default(now())
+    updatedAt DateTime @default(now()) @updatedAt
+
+    // Basic information
+    logoPath String?
+    tmdbId   Int     @unique
+    name     String  @unique @db.VarChar(50)
+    slug     String  @unique @db.VarChar(60)
+    priority Int     @default(autoincrement())
+
+    // Metadata
+    mediaCount Int @default(0)
+
+    // Relations
+    media Media[]
+}
+
+model Collection {
+    id        Int      @id @default(autoincrement())
+    tmdbId    Int      @unique
+    createAt  DateTime @default(now())
+    updatedAt DateTime @default(now()) @updatedAt
+
+    // Basic information
+    name         String
+    overview     String
+    posterPath   String
+    backdropPath String
+
+    parts Media[]
 }
