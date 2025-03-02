@@ -40,6 +40,7 @@ export const GET = async (request: NextRequest) => {
       },
     });
     const data = await res.text();
+    console.log("DATA", data);
 
     const parser = new Parser();
     parser.push(data);
@@ -106,10 +107,7 @@ export const GET = async (request: NextRequest) => {
     newM3u8Parser.end();
 
     const m3u8Output = serializeM3U8(newM3u8Parser.manifest);
-
-    return new Response(m3u8Output, {
-      headers: { "Content-Type": "application/vnd.apple.mpegurl", ...headers },
-    });
+    return new Response(m3u8Output);
   } catch (error) {
     return Response.json({ error }, { status: 500 });
   }
