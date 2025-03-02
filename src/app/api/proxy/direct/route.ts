@@ -32,22 +32,17 @@ export const GET = async (request: NextRequest) => {
     const ref = encodedRef ? decodeURIComponent(encodedRef) : baseUrl.origin;
 
     const res = await fetch(url, {
-      ...request,
       headers: {
-        ...request.headers,
-        Host: baseUrl.host,
         Referer: ref,
         Origin: ref,
-        range: "bytes=0-",
+        Range: request.headers.get("Range") || "bytes=0-",
         "sec-fetch-dest": "video",
-        // ...headers,
+        TE: "trailers",
       },
       cache: "no-cache",
     });
 
-    return new Response(res.body, {
-      ...request,
-    });
+    return new Response(res.body);
   } catch (error) {
     return Response.json({ error }, { status: 500 });
   }
