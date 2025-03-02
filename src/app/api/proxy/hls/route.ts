@@ -4,24 +4,24 @@ import type { NextRequest } from "next/server";
 import { env } from "~/env";
 import { serializeM3U8 } from "~/lib/utils";
 
-const headers = {
-  Accept: "*/*",
-  "Accept-Encoding": "gzip, deflate, br",
-  "Accept-Language": "en-US,en;q=0.5",
-  "User-Agent":
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:135.0) Gecko/20100101 Firefox/135.0",
-  DNT: "1",
-  Connection: "keep-alive",
-  "Sec-Fetch-Dest": "empty",
-  "Sec-Fetch-Mode": "cors",
-  "Sec-Fetch-Site": "cross-site",
-  Pragma: "no-cache",
-  "Cache-Control": "no-store, no-cache, must-revalidate, max-age=0",
-  "Upgrade-Insecure-Requests": "1",
-  Priority: "u=4",
-  TE: "trailers",
-  "X-Requested-With": "XMLHttpRequest",
-};
+// const headers = {
+//   Accept: "*/*",
+//   "Accept-Encoding": "gzip, deflate, br",
+//   "Accept-Language": "en-US,en;q=0.5",
+//   "User-Agent":
+//     "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:135.0) Gecko/20100101 Firefox/135.0",
+//   DNT: "1",
+//   Connection: "keep-alive",
+//   "Sec-Fetch-Dest": "empty",
+//   "Sec-Fetch-Mode": "cors",
+//   "Sec-Fetch-Site": "cross-site",
+//   Pragma: "no-cache",
+//   "Cache-Control": "no-store, no-cache, must-revalidate, max-age=0",
+//   "Upgrade-Insecure-Requests": "1",
+//   Priority: "u=4",
+//   TE: "trailers",
+//   "X-Requested-With": "XMLHttpRequest",
+// };
 
 const getLinks = (payload: { newUri: string; ref: string; isTs: boolean }) => {
   const apiUrl = env.API_URL;
@@ -42,11 +42,13 @@ export const GET = async (request: NextRequest) => {
     const ref = encodedRef ? decodeURIComponent(encodedRef) : baseUrl.origin;
 
     const res = await fetch(url, {
+      ...request,
       headers: {
         ...request.headers,
         Referer: ref,
         Origin: ref,
         Host: baseUrl.host,
+        // ...headers,
       },
       cache: "no-cache",
     });
