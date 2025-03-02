@@ -20,6 +20,9 @@ export const dynamic = "force-dynamic";
 // };
 
 const headers = {
+  authority: "dooodster.com",
+  method: "GET",
+  scheme: "https",
   accept:
     "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
   "accept-language": "en-US,en;q=0.9",
@@ -35,8 +38,12 @@ const headers = {
   "sec-fetch-site": "cross-site",
   "sec-fetch-storage-access": "active",
   "upgrade-insecure-requests": "1",
-  Referer: "https://iframetester.com/",
+  Host: "dooodster.com",
+  Origin: "https://dooodster.com",
+  Referer: "https://dooodster.com",
+  Referrer: "https://dooodster.com",
   "Referrer-Policy": "strict-origin-when-cross-origin",
+  TE: "trailers",
 };
 
 const getDoodStreamLink = async (url: string) => {
@@ -55,9 +62,17 @@ const getDoodStreamLink = async (url: string) => {
   const [, hash, token] = match;
   if (!hash || !token) throw new Error("Invalid endpoint");
 
+  console.log(/.*(\/e\/.*)/.exec(url)?.[1]);
+
   const validatedRes = await fetch(
     `https://dooodster.com/dood?op=watch&hash=${hash}&token=${token}&embed=1&ref2=&adb=0&ftor=0`,
-    { headers },
+    {
+      headers: {
+        ...headers,
+
+        path: /.*(\/e\/.*)/.exec(url)?.[1] || "",
+      },
+    },
   );
   const validate = await validatedRes.text();
   const isValidated = validate.includes("OK");
