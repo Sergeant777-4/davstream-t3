@@ -20,30 +20,21 @@ export const dynamic = "force-dynamic";
 // };
 
 const headers = {
-  authority: "dooodster.com",
-  method: "GET",
-  scheme: "https",
-  accept:
-    "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
-  "accept-language": "en-US,en;q=0.9",
-  "cache-control": "no-cache",
-  pragma: "no-cache",
-  priority: "u=0, i",
-  "sec-ch-ua":
-    '"Not(A:Brand";v="99", "Google Chrome";v="133", "Chromium";v="133"',
-  "sec-ch-ua-mobile": "?0",
-  "sec-ch-ua-platform": '"Windows"',
-  "sec-fetch-dest": "iframe",
-  "sec-fetch-mode": "navigate",
-  "sec-fetch-site": "cross-site",
-  "sec-fetch-storage-access": "active",
-  "upgrade-insecure-requests": "1",
   Host: "dooodster.com",
+  "Accept-Encoding": "gzip, deflate, br, zstd",
+  DNT: "1",
+  Connection: "keep-alive",
+  "Upgrade-Insecure-Requests": "1",
+  "Sec-Fetch-Dest": "document",
+  "Sec-Fetch-Mode": "navigate",
+  "Sec-Fetch-Site": "none",
+  "Sec-Fetch-User": "?1",
+  TE: "trailers",
+  "User-Agent":
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:135.0) Gecko/20100101 Firefox/135.0x",
   Origin: "https://dooodster.com",
   Referer: "https://dooodster.com",
-  Referrer: "https://dooodster.com",
-  "Referrer-Policy": "strict-origin-when-cross-origin",
-  TE: "trailers",
+  Cookie: "lang=1",
 };
 
 const getDoodStreamLink = async (url: string) => {
