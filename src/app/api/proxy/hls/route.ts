@@ -16,7 +16,7 @@ const headers = {
   "Sec-Fetch-Mode": "cors",
   "Sec-Fetch-Site": "cross-site",
   Pragma: "no-cache",
-  "Cache-Control": "no-cache",
+  "Cache-Control": "no-store, no-cache, must-revalidate, max-age=0",
   "Upgrade-Insecure-Requests": "1",
   Priority: "u=4",
   TE: "trailers",
@@ -43,10 +43,10 @@ export const GET = async (request: NextRequest) => {
 
     const res = await fetch(url, {
       headers: {
+        ...request.headers,
         Referer: ref,
         Origin: ref,
         Host: baseUrl.host,
-        ...headers,
       },
       cache: "no-cache",
     });
