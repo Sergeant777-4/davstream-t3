@@ -39,7 +39,7 @@ const headers = {
 };
 
 const getDoodStreamLink = async (url: string) => {
-  const { page, browser } = await connect({ turnstile: true, headless: false });
+  const { page, browser } = await connect({ turnstile: true, headless: true });
   await page.goto(url, { waitUntil: "load" });
   const content = await page.content();
   await browser.close();
