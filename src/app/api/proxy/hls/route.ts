@@ -112,7 +112,9 @@ export const GET = async (request: NextRequest) => {
     newM3u8Parser.end();
 
     const m3u8Output = serializeM3U8(newM3u8Parser.manifest);
-    return new Response(m3u8Output);
+    return new Response(m3u8Output, {
+      ...request,
+    });
   } catch (error) {
     return Response.json({ error }, { status: 500 });
   }

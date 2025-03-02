@@ -11,7 +11,7 @@ const Player = ({ data }: Props) => {
   useEffect(() => {
     const art = new Artplayer({
       container: artRef.current || "#player",
-      type: data.type === "hls" ? "m3u8" : "mpd",
+      type: data.type === "hls" ? "hls" : "mpd",
       customType: {
         m3u8: (video, url, art) => {
           if (Hls.isSupported()) {

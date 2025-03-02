@@ -45,7 +45,9 @@ export const GET = async (request: NextRequest) => {
       cache: "no-cache",
     });
 
-    return new Response(res.body);
+    return new Response(res.body, {
+      ...request,
+    });
   } catch (error) {
     return Response.json({ error }, { status: 500 });
   }
