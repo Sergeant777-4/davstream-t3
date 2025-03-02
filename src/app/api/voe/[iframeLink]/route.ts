@@ -50,7 +50,7 @@ export const GET = async (
   const encoded = regex.exec(document)?.[1];
 
   if (!encoded)
-    return Response.json({ error: "Encoded url not found" }, { status: 400 });
+    return Response.json({ error: "Encoded url not found" }, { status: 404 });
 
   const url = atob(encoded);
   return Response.json(
