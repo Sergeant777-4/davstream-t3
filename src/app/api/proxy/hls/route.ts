@@ -25,7 +25,6 @@ export const GET = async (request: NextRequest) => {
   try {
     const searchParams = request.nextUrl.searchParams;
     const encodedUrl = searchParams.get("url");
-
     if (!encodedUrl) throw new Error("URL is required");
 
     const url = decodeURIComponent(encodedUrl);
@@ -41,6 +40,7 @@ export const GET = async (request: NextRequest) => {
     });
     const data = await res.text();
     console.log("DATA", data);
+    if (data.includes("403 Forbidden")) throw new Error("403 Forbidden");
 
     const parser = new Parser();
     parser.push(data);
