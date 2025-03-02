@@ -21,6 +21,7 @@ const WatchPage = async ({ searchParams }: Props) => {
 
   const media = await mediaAction.getMediaDetails(valid.data.id);
   const players = await playerAction.getDirectLinks({ mediaId: media.id });
+  console.log(players);
   const player = players?.[valid.data.player];
   // TODO: https://fremtv.lol:443/movie/144BB5626E2EDF5C9E6B39A688E5DF07/256.mp4
 

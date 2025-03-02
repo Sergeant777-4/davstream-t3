@@ -1,5 +1,7 @@
+export const dynamic = "force-dynamic";
 import { Parser } from "m3u8-parser";
 import type { NextRequest } from "next/server";
+import { env } from "~/env";
 import { serializeM3U8 } from "~/lib/utils";
 
 const headers = {
@@ -22,7 +24,7 @@ const headers = {
 };
 
 const getLinks = (payload: { newUri: string; ref: string; isTs: boolean }) => {
-  const apiUrl = "https://davstream-t3.vercel.app";
+  const apiUrl = env.API_URL;
   return payload.isTs
     ? `${apiUrl}/proxy/direct?url=${encodeURIComponent(payload.newUri)}&ref=${encodeURIComponent(payload.ref)}`
     : `${apiUrl}/proxy/hls?url=${encodeURIComponent(payload.newUri)}&ref=${encodeURIComponent(payload.ref)}`;

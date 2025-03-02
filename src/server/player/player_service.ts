@@ -1,4 +1,5 @@
 import type { Prisma, TypeEnum } from "@prisma/client";
+import { env } from "~/env";
 import { db } from "~/server/db";
 
 export const DOMAINS = [
@@ -33,7 +34,7 @@ export const DOMAINS = [
 ] as const;
 
 class PlayerService {
-  apiUrl = "https://davstream-t3.vercel.app/api";
+  apiUrl = env.API_URL;
 
   upsert = async (insertData: Prisma.PlayerCreateInput) => {
     return await db.player.upsert({
@@ -76,7 +77,7 @@ class PlayerService {
         const extractedData = await this.extractDirectLink(player.url, host);
         return { ...player, ...extractedData };
       } catch (error) {
-        console.error(error);
+        console.warn(error);
         return { ...player, type: "embed" };
       }
     });
