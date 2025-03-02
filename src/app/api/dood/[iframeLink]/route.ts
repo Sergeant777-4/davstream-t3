@@ -19,7 +19,7 @@ const headers = {
   "X-Requested-With": "XMLHttpRequest",
 };
 
-export const getDoodStreamLink = async (url: string) => {
+const getDoodStreamLink = async (url: string) => {
   const res = await fetch(url, { headers: headers });
   const html = await res.text();
 
