@@ -61,9 +61,11 @@ const Player = ({ data }: Props) => {
   }, [data.type, data.url]);
 
   return (
-    <div className="aspect-video w-full overflow-hidden rounded-md">
-      <div id="player" ref={artRef} className="size-full"></div>
-    </div>
+    <>
+      <div className="aspect-video w-full overflow-hidden rounded-md">
+        <div id="player" ref={artRef} className="size-full"></div>
+      </div>
+    </>
   );
 };
 
