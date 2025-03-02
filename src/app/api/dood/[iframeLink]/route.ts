@@ -1,6 +1,5 @@
 export const dynamic = "force-dynamic";
-import { connect } from "puppeteer-real-browser";
-
+import axios from "axios";
 // const headers = {
 //   "User-Agent":
 //     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36",
@@ -39,11 +38,11 @@ const headers = {
 };
 
 const getDoodStreamLink = async (url: string) => {
-  const { page, browser } = await connect({ turnstile: true, headless: true });
-  await page.goto(url, { waitUntil: "load" });
-  const content = await page.content();
-  await browser.close();
+  // BROWSER TOKEN "RryeqbQf5tbWkB13136082bc074064e79f78e51d30"
+  const res = await axios.get(url, { headers });
+  const content = res.data as string;
 
+  console.log(content);
   // const res = await fetch(url, { headers: headers });
   // const html = await res.text();
 
