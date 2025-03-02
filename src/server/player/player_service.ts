@@ -96,6 +96,7 @@ class PlayerService {
     data = (await res.json()) as ExtractedLink;
 
     const directLink = `${this.proxyUrl}/proxy/${data.type}?url=${encodeURIComponent(data.url)}${data.ref ? "&ref=" + encodeURIComponent(data.ref) : ""}`;
+
     return { ...data, url: directLink };
   };
 }
