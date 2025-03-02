@@ -31,6 +31,9 @@ export const GET = async (
       origin: iframeBaseURL.origin,
       ...headers,
     },
+    cache: "force-cache",
+    next: { revalidate: 900 },
+    mode: "no-cors",
   });
 
   const dummyPage = await res.text();
@@ -43,6 +46,9 @@ export const GET = async (
       origin: iframeBaseURL.origin,
       ...headers,
     },
+    cache: "force-cache",
+    next: { revalidate: 900 },
+    mode: "no-cors",
   });
   const document = await res2.text();
 

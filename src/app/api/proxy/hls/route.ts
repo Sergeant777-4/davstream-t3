@@ -40,13 +40,15 @@ export const GET = async (request: NextRequest) => {
     const ref = encodedRef ? decodeURIComponent(encodedRef) : baseUrl.origin;
 
     const res = await fetch(url, {
-      cache: "no-cache",
       headers: {
         Referer: ref,
         Origin: ref,
         Host: baseUrl.host,
         ...headers,
       },
+      cache: "force-cache",
+      next: { revalidate: 900 },
+      mode: "no-cors",
     });
     const data = await res.text();
     if (data.includes("403 Forbidden")) throw new Error("403 Forbidden");

@@ -32,7 +32,11 @@ export const GET = async (
       host: baseURL.host,
       ...headers,
     },
+    cache: "force-cache",
+    next: { revalidate: 900 },
+    mode: "no-cors",
   });
+
   const document = await res.text();
   const regex = /sources:\s\["(.*)"],/gm;
   const url = regex.exec(document)?.[1];
