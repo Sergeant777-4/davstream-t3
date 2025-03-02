@@ -34,15 +34,31 @@ export const GET = async (request: NextRequest) => {
     const res = await fetch(url, {
       headers: {
         Referer: ref,
-        Origin: ref,
-        Range: request.headers.get("Range") || "bytes=0-",
+        range: request.headers.get("range") || "bytes=0-",
+        accept: "*/*",
+        "accept-language": "en-US,en;q=0.9",
         "sec-fetch-dest": "video",
+        "sec-fetch-mode": "no-cors",
+        "sec-fetch-site": "same-site",
+        "sec-ch-ua-mobile": "?0",
+        "sec-ch-ua-platform": '"Windows"',
+        "sec-ch-ua":
+          '"Not(A:Brand";v="99", "Google Chrome";v="133", "Chromium";v="133"',
         TE: "trailers",
+        Pragma: "no-cache",
+        "cache-control": "no-cache",
+        "Referrer-Policy": "strict-origin-when-cross-origin",
       },
-      cache: "no-cache",
+      cache: "no-store",
     });
 
-    return new Response(res.body);
+    console.log(res);
+
+    return new Response(res.body, {
+      status: res.status,
+      statusText: res.statusText,
+      headers: res.headers,
+    });
   } catch (error) {
     return Response.json({ error }, { status: 500 });
   }

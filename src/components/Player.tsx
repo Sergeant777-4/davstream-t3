@@ -11,24 +11,27 @@ const Player = ({ data }: Props) => {
   useEffect(() => {
     const art = new Artplayer({
       container: artRef.current || "#player",
-      type: data.type === "hls" ? "m3u8" : "mpd",
-      customType: {
-        m3u8: (video, url, art) => {
-          if (Hls.isSupported()) {
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
-            if (art.hls) art?.hls?.destroy();
-            const hls = new Hls();
-            hls.loadSource(url);
-            hls.attachMedia(video);
-            art.hls = hls;
-            art.on("destroy", () => hls.destroy());
-          } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
-            video.src = url;
-          } else {
-            art.notice.show = "Unsupported playback format: m3u8";
-          }
+      // type: data.type === "hls" ? "m3u8" : "mpd",
+      ...(data.type === "hls" && {
+        type: "m3u8",
+        customType: {
+          m3u8: (video, url, art) => {
+            if (Hls.isSupported()) {
+              // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+              if (art.hls) art?.hls?.destroy();
+              const hls = new Hls();
+              hls.loadSource(url);
+              hls.attachMedia(video);
+              art.hls = hls;
+              art.on("destroy", () => hls.destroy());
+            } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
+              video.src = url;
+            } else {
+              art.notice.show = "Unsupported playback format: m3u8";
+            }
+          },
         },
-      },
+      }),
       fullscreen: true,
       volume: 0.5,
       autoMini: true,

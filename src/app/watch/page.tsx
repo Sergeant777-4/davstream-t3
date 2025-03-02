@@ -34,7 +34,10 @@ const WatchPage = async ({ searchParams }: Props) => {
         {extracted.type === "iframe" ? (
           <iframe src={player.url}></iframe>
         ) : (
-          <Player data={extracted} />
+          <>
+            {/* <video src={player.url} controls></video> */}
+            <Player data={extracted} />
+          </>
         )}
       </div>
 
