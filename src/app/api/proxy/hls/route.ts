@@ -21,6 +21,17 @@ const headers = {
   "X-Requested-With": "XMLHttpRequest",
 };
 
+const getLinks = (payload: {
+  apiUrl: string;
+  newUri: string;
+  ref: string;
+  isTs: boolean;
+}) => {
+  return payload.isTs
+    ? `${payload.apiUrl}/proxy/direct?url=${encodeURIComponent(payload.newUri)}&ref=${encodeURIComponent(payload.ref)}`
+    : `${payload.apiUrl}/proxy/hls?url=${encodeURIComponent(payload.newUri)}&ref=${encodeURIComponent(payload.ref)}`;
+};
+
 export const GET = async (request: NextRequest) => {
   try {
     const searchParams = request.nextUrl.searchParams;
@@ -29,20 +40,19 @@ export const GET = async (request: NextRequest) => {
     if (!encodedUrl) throw new Error("URL is required");
 
     const url = decodeURIComponent(encodedUrl);
-    const ref = encodedRef && decodeURIComponent(encodedRef);
-    const apiUrl = "http://localhost:3000";
     const baseUrl = new URL(url);
+    const ref = encodedRef ? decodeURIComponent(encodedRef) : baseUrl.origin;
+    const apiUrl = "http://localhost:3000";
 
     const res = await fetch(url, {
       headers: {
-        Referer: ref || baseUrl.origin,
-        Origin: ref || baseUrl.origin,
+        Referer: ref,
+        Origin: ref,
         Host: baseUrl.host,
         ...headers,
       },
     });
     const data = await res.text();
-    console.log("DATA", data);
     if (data.includes("403 Forbidden")) throw new Error("403 Forbidden");
 
     const parser = new Parser();
@@ -57,19 +67,15 @@ export const GET = async (request: NextRequest) => {
       const uri = iframe.uri;
       const isUrl = uri.startsWith("http");
       const newUri = isUrl ? uri : new URL(uri, baseUrl).toString();
-      const isTs = /.ts/gm.exec(uri);
+      const isTs = uri.includes(".ts");
 
       return {
         ...iframe,
         attributes: {
           ...iframe.attributes,
-          URI: isTs
-            ? `${apiUrl}/proxy/direct?url=${encodeURIComponent(newUri)}`
-            : `${apiUrl}/proxy/hls?url=${encodeURIComponent(newUri)}`,
+          URI: getLinks({ apiUrl, isTs, newUri, ref }),
         },
-        uri: isTs
-          ? `${apiUrl}/proxy/direct?url=${encodeURIComponent(newUri)}`
-          : `${apiUrl}/proxy/hls?url=${encodeURIComponent(newUri)}`,
+        uri: getLinks({ apiUrl, isTs, newUri, ref }),
       };
     });
 
@@ -78,13 +84,11 @@ export const GET = async (request: NextRequest) => {
       const uri = playlist?.uri as string;
       const isUrl = uri.startsWith("http");
       const newUri = isUrl ? uri : new URL(uri, baseUrl).toString();
-      const isTs = /.ts/gm.exec(uri);
+      const isTs = uri.includes(".ts");
 
       return {
         ...playlist,
-        uri: isTs
-          ? `${apiUrl}/proxy/direct?url=${encodeURIComponent(newUri)}`
-          : `${apiUrl}/proxy/hls?url=${encodeURIComponent(newUri)}`,
+        uri: getLinks({ apiUrl, isTs, newUri, ref }),
       };
     });
 
@@ -92,13 +96,11 @@ export const GET = async (request: NextRequest) => {
       const uri = segment.uri;
       const isUrl = uri.startsWith("http");
       const newUri = isUrl ? uri : new URL(uri, baseUrl).toString();
-      const isTs = /.ts/gm.exec(uri);
+      const isTs = uri.includes(".ts");
 
       return {
         ...segment,
-        uri: isTs
-          ? `${apiUrl}/proxy/direct?url=${encodeURIComponent(newUri)}`
-          : `${apiUrl}/proxy/hls?url=${encodeURIComponent(newUri)}`,
+        uri: getLinks({ apiUrl, isTs, newUri, ref }),
       };
     });
 
