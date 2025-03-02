@@ -1,22 +1,42 @@
 export const dynamic = "force-dynamic";
 
+// const headers = {
+//   "User-Agent":
+//     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36",
+//   "Accept-Language": "en-US,en;q=0.5",
+//   "Accept-Encoding": "gzip, deflate, br",
+//   Accept: "*/*",
+//   DNT: "1",
+//   Connection: "keep-alive",
+//   "Sec-Fetch-Dest": "iframe",
+//   "Sec-Fetch-Mode": "navigate",
+//   "Sec-Fetch-Site": "cross-site",
+//   Pragma: "no-cache",
+//   "Cache-Control": "no-cache",
+//   "Upgrade-Insecure-Requests": "1",
+//   Priority: "u=4",
+//   TE: "trailers",
+//   "X-Requested-With": "XMLHttpRequest",
+// };
+
 const headers = {
-  "User-Agent":
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36",
-  "Accept-Language": "en-US,en;q=0.5",
-  "Accept-Encoding": "gzip, deflate, br",
-  Accept: "*/*",
-  DNT: "1",
-  Connection: "keep-alive",
-  "Sec-Fetch-Dest": "iframe",
-  "Sec-Fetch-Mode": "navigate",
-  "Sec-Fetch-Site": "cross-site",
-  Pragma: "no-cache",
-  "Cache-Control": "no-cache",
-  "Upgrade-Insecure-Requests": "1",
-  Priority: "u=4",
-  TE: "trailers",
-  "X-Requested-With": "XMLHttpRequest",
+  accept:
+    "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
+  "accept-language": "en-US,en;q=0.9",
+  "cache-control": "no-cache",
+  pragma: "no-cache",
+  priority: "u=0, i",
+  "sec-ch-ua":
+    '"Not(A:Brand";v="99", "Google Chrome";v="133", "Chromium";v="133"',
+  "sec-ch-ua-mobile": "?0",
+  "sec-ch-ua-platform": '"Windows"',
+  "sec-fetch-dest": "iframe",
+  "sec-fetch-mode": "navigate",
+  "sec-fetch-site": "cross-site",
+  "sec-fetch-storage-access": "active",
+  "upgrade-insecure-requests": "1",
+  Referer: "https://iframetester.com/",
+  "Referrer-Policy": "strict-origin-when-cross-origin",
 };
 
 const getDoodStreamLink = async (url: string) => {
