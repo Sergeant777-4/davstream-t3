@@ -20,21 +20,25 @@ import axios from "axios";
 // };
 
 const headers = {
-  Host: "dooodster.com",
-  "Accept-Encoding": "gzip, deflate, br, zstd",
-  DNT: "1",
-  Connection: "keep-alive",
-  "Upgrade-Insecure-Requests": "1",
-  "Sec-Fetch-Dest": "document",
-  "Sec-Fetch-Mode": "navigate",
-  "Sec-Fetch-Site": "none",
-  "Sec-Fetch-User": "?1",
-  TE: "trailers",
-  "User-Agent":
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:135.0) Gecko/20100101 Firefox/135.0x",
-  Origin: "https://dooodster.com",
-  Referer: "https://dooodster.com",
-  Cookie: "lang=1",
+  accept:
+    "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
+  "accept-language": "en-US,en;q=0.9",
+  "cache-control": "no-cache",
+  dnt: "1",
+  pragma: "no-cache",
+  priority: "u=0, i",
+  "sec-ch-ua":
+    '"Not(A:Brand";v="99", "Google Chrome";v="133", "Chromium";v="133"',
+  "sec-ch-ua-mobile": "?0",
+  "sec-ch-ua-platform": '"Windows"',
+  "sec-fetch-dest": "document",
+  "sec-fetch-mode": "navigate",
+  "sec-fetch-site": "none",
+  "sec-fetch-user": "?1",
+  "upgrade-insecure-requests": "1",
+  "user-agent":
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36",
+  Cookie: "file_id=200063626; aff=260356; ref_url=; lang=1; lang=1",
 };
 
 const getDoodStreamLink = async (url: string) => {
