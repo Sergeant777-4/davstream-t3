@@ -33,7 +33,7 @@ export const DOMAINS = [
 ] as const;
 
 class PlayerService {
-  proxyUrl = "https://davstream-t3.vercel.app/api";
+  apiUrl = "https://davstream-t3.vercel.app/api";
 
   upsert = async (insertData: Prisma.PlayerCreateInput) => {
     return await db.player.upsert({
@@ -89,13 +89,11 @@ class PlayerService {
   };
 
   extractDirectLink = async (url: string, host: string) => {
-    const endpoint = `${this.proxyUrl}/${host}/${encodeURIComponent(url)}`;
+    const endpoint = `${this.apiUrl}/${host}/${encodeURIComponent(url)}`;
 
-    let data: ExtractedLink | null = null;
     const res = await fetch(endpoint);
-    data = (await res.json()) as ExtractedLink;
-
-    const directLink = `${this.proxyUrl}/proxy/${data.type}?url=${encodeURIComponent(data.url)}${data.ref ? "&ref=" + encodeURIComponent(data.ref) : ""}`;
+    const data = (await res.json()) as ExtractedLink;
+    const directLink = `${this.apiUrl}/proxy/${data.type}?url=${encodeURIComponent(data.url)}&ref=${encodeURIComponent(data.ref)}`;
 
     return { ...data, url: directLink };
   };

@@ -61,5 +61,5 @@ type ITmdbImagesResponse = {
 type ExtractedLink = {
   type: string;
   url: string;
-  ref?: string;
+  ref: string;
 };
