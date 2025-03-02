@@ -25,7 +25,6 @@ export const serializeM3U8 = (manifest: Manifest): string => {
       .join(",");
 
   if (manifest.version) output += `#EXT-X-VERSION:${manifest.version}\n`;
-  if (manifest.allowCache) output += `#EXT-X-ALLOW-CACHE:YES\n`;
   if (manifest.targetDuration)
     output += `#EXT-X-TARGETDURATION:${manifest.targetDuration}\n`;
   if (manifest.mediaSequence !== undefined)
