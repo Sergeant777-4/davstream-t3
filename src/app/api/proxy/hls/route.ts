@@ -3,15 +3,15 @@ import type { NextRequest } from "next/server";
 import { serializeM3U8 } from "~/lib/utils";
 
 const headers = {
-  "User-Agent":
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36",
-  "Accept-Language": "en-US,en;q=0.5",
-  "Accept-Encoding": "gzip, deflate, br",
   Accept: "*/*",
+  "Accept-Encoding": "gzip, deflate, br",
+  "Accept-Language": "en-US,en;q=0.5",
+  "User-Agent":
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:135.0) Gecko/20100101 Firefox/135.0",
   DNT: "1",
   Connection: "keep-alive",
-  "Sec-Fetch-Dest": "iframe",
-  "Sec-Fetch-Mode": "navigate",
+  "Sec-Fetch-Dest": "empty",
+  "Sec-Fetch-Mode": "cors",
   "Sec-Fetch-Site": "cross-site",
   Pragma: "no-cache",
   "Cache-Control": "no-cache",
@@ -25,16 +25,19 @@ export const GET = async (request: NextRequest) => {
   try {
     const searchParams = request.nextUrl.searchParams;
     const encodedUrl = searchParams.get("url");
+    const encodedRef = searchParams.get("ref");
     if (!encodedUrl) throw new Error("URL is required");
 
     const url = decodeURIComponent(encodedUrl);
+    const ref = encodedRef && decodeURIComponent(encodedRef);
     const apiUrl = "http://localhost:3000";
     const baseUrl = new URL(url);
 
     const res = await fetch(url, {
       headers: {
-        referer: baseUrl.origin,
-        origin: baseUrl.origin,
+        Referer: ref || baseUrl.origin,
+        Origin: ref || baseUrl.origin,
+        Host: baseUrl.host,
         ...headers,
       },
     });
