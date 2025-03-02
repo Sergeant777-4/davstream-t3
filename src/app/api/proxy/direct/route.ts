@@ -30,8 +30,6 @@ export const GET = async (request: NextRequest) => {
     const baseUrl = new URL(url);
     const ref = encodedRef ? decodeURIComponent(encodedRef) : baseUrl.origin;
 
-    console.log(ref);
-
     const res = await fetch(url, {
       headers: {
         "sec-fetch-dest": "video",
@@ -41,9 +39,7 @@ export const GET = async (request: NextRequest) => {
         Host: baseUrl.host,
         ...headers,
       },
-      cache: "force-cache",
-      next: { revalidate: 900 },
-      mode: "no-cors",
+      cache: "no-cache",
     });
 
     return new Response(res.body);

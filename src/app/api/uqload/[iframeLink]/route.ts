@@ -32,9 +32,7 @@ export const GET = async (
       host: baseURL.host,
       ...headers,
     },
-    cache: "force-cache",
-    next: { revalidate: 900 },
-    mode: "no-cors",
+    cache: "no-cache",
   });
 
   const document = await res.text();

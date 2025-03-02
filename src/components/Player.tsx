@@ -5,8 +5,6 @@ import {
   DefaultVideoLayout,
 } from "@vidstack/react/player/layouts/default";
 
-import React from "react";
-
 type Props = { url?: string };
 
 const Player = ({ url }: Props) => {
