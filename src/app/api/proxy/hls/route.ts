@@ -40,6 +40,7 @@ export const GET = async (request: NextRequest) => {
     const ref = encodedRef ? decodeURIComponent(encodedRef) : baseUrl.origin;
 
     const res = await fetch(url, {
+      cache: "no-cache",
       headers: {
         Referer: ref,
         Origin: ref,
