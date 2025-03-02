@@ -21,15 +21,11 @@ const headers = {
   "X-Requested-With": "XMLHttpRequest",
 };
 
-const getLinks = (payload: {
-  apiUrl: string;
-  newUri: string;
-  ref: string;
-  isTs: boolean;
-}) => {
+const getLinks = (payload: { newUri: string; ref: string; isTs: boolean }) => {
+  const apiUrl = "https://davstream-t3.vercel.app";
   return payload.isTs
-    ? `${payload.apiUrl}/proxy/direct?url=${encodeURIComponent(payload.newUri)}&ref=${encodeURIComponent(payload.ref)}`
-    : `${payload.apiUrl}/proxy/hls?url=${encodeURIComponent(payload.newUri)}&ref=${encodeURIComponent(payload.ref)}`;
+    ? `${apiUrl}/proxy/direct?url=${encodeURIComponent(payload.newUri)}&ref=${encodeURIComponent(payload.ref)}`
+    : `${apiUrl}/proxy/hls?url=${encodeURIComponent(payload.newUri)}&ref=${encodeURIComponent(payload.ref)}`;
 };
 
 export const GET = async (request: NextRequest) => {
@@ -42,7 +38,6 @@ export const GET = async (request: NextRequest) => {
     const url = decodeURIComponent(encodedUrl);
     const baseUrl = new URL(url);
     const ref = encodedRef ? decodeURIComponent(encodedRef) : baseUrl.origin;
-    const apiUrl = "http://localhost:3000";
 
     const res = await fetch(url, {
       headers: {
@@ -73,9 +68,9 @@ export const GET = async (request: NextRequest) => {
         ...iframe,
         attributes: {
           ...iframe.attributes,
-          URI: getLinks({ apiUrl, isTs, newUri, ref }),
+          URI: getLinks({ isTs, newUri, ref }),
         },
-        uri: getLinks({ apiUrl, isTs, newUri, ref }),
+        uri: getLinks({ isTs, newUri, ref }),
       };
     });
 
@@ -88,7 +83,7 @@ export const GET = async (request: NextRequest) => {
 
       return {
         ...playlist,
-        uri: getLinks({ apiUrl, isTs, newUri, ref }),
+        uri: getLinks({ isTs, newUri, ref }),
       };
     });
 
@@ -100,7 +95,7 @@ export const GET = async (request: NextRequest) => {
 
       return {
         ...segment,
-        uri: getLinks({ apiUrl, isTs, newUri, ref }),
+        uri: getLinks({ isTs, newUri, ref }),
       };
     });
 

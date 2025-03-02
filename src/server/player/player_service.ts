@@ -33,7 +33,7 @@ export const DOMAINS = [
 ] as const;
 
 class PlayerService {
-  proxyUrl = "https://better-proxy.pridila-2006.workers.dev";
+  proxyUrl = "https://davstream-t3.vercel.app/api";
 
   upsert = async (insertData: Prisma.PlayerCreateInput) => {
     return await db.player.upsert({
