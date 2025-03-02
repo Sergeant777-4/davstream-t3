@@ -1,4 +1,5 @@
 export const dynamic = "force-dynamic";
+import { connect } from "puppeteer-real-browser";
 
 // const headers = {
 //   "User-Agent":
@@ -38,13 +39,18 @@ const headers = {
 };
 
 const getDoodStreamLink = async (url: string) => {
-  const res = await fetch(url, { headers: headers });
-  const html = await res.text();
+  const { page, browser } = await connect({ turnstile: true, headless: false });
+  await page.goto(url, { waitUntil: "load" });
+  const content = await page.content();
+  await browser.close();
 
-  if (html.includes("Video not found"))
+  // const res = await fetch(url, { headers: headers });
+  // const html = await res.text();
+
+  if (content.includes("Video not found"))
     throw new Error("Wrong url or video deleted");
 
-  const md5Link = /\$.get\('(\/pass_md5\/.*?)'/gm.exec(html)?.[1];
+  const md5Link = /\$.get\('(\/pass_md5\/.*?)'/gm.exec(content)?.[1];
   if (!md5Link) throw new Error("Md5Link not found");
 
   const match = /\/pass_md5\/(.*)\/(.*)/.exec(md5Link);
@@ -53,17 +59,9 @@ const getDoodStreamLink = async (url: string) => {
   const [, hash, token] = match;
   if (!hash || !token) throw new Error("Invalid endpoint");
 
-  console.log(/.*(\/e\/.*)/.exec(url)?.[1]);
-
   const validatedRes = await fetch(
     `https://dooodster.com/dood?op=watch&hash=${hash}&token=${token}&embed=1&ref2=&adb=0&ftor=0`,
-    {
-      headers: {
-        ...headers,
-
-        path: /.*(\/e\/.*)/.exec(url)?.[1] || "",
-      },
-    },
+    { headers: headers },
   );
   const validate = await validatedRes.text();
   const isValidated = validate.includes("OK");
