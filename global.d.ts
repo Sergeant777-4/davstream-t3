@@ -59,7 +59,7 @@ type ITmdbImagesResponse = {
 };
 
 type ExtractedLink = {
-  type: string;
+  type: "hls" | "direct" | "iframe";
   url: string;
   ref: string;
 };

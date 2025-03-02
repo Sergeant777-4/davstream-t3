@@ -1,6 +1,4 @@
 import "~/styles/globals.css";
-import "@vidstack/react/player/styles/default/theme.css";
-import "@vidstack/react/player/styles/default/layouts/video.css";
 
 import { GeistSans } from "geist/font/sans";
 import { type Metadata } from "next";

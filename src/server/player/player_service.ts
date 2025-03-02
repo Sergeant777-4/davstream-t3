@@ -64,6 +64,7 @@ class PlayerService {
     return host;
   };
 
+  // TODO: IMPROVE THIS LOGIC
   getAllMediaLinks = async (id: number, type: TypeEnum) => {
     const players =
       type === "MOVIE"
@@ -86,6 +87,7 @@ class PlayerService {
     const filtered = results.filter(
       (item) => item !== null && item !== undefined,
     );
+
     return filtered;
   };
 
@@ -94,6 +96,7 @@ class PlayerService {
 
     const res = await fetch(endpoint);
     const data = (await res.json()) as ExtractedLink;
+
     const directLink = `${this.apiUrl}/proxy/${data.type}?url=${encodeURIComponent(data.url)}&ref=${encodeURIComponent(data.ref)}`;
 
     return { ...data, url: directLink };

@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import * as z from "zod";
 import Player from "~/components/Player";
 import mediaAction from "~/server/media/media_actions";
-import playerAction from "~/server/player/player_actions";
+import { getDirectLink } from "~/server/player/player_actions";
 
 const searchParamsType = z.object({
   id: z.coerce.number(),
@@ -20,23 +20,26 @@ const WatchPage = async ({ searchParams }: Props) => {
   if (!valid.success) notFound();
 
   const media = await mediaAction.getMediaDetails(valid.data.id);
-  const players = await playerAction.getDirectLinks({ mediaId: media.id });
-  console.log(players);
-  const player = players?.[valid.data.player];
-  // TODO: https://fremtv.lol:443/movie/144BB5626E2EDF5C9E6B39A688E5DF07/256.mp4
+  const player = media.players[valid.data.player];
+  if (!player) notFound();
+
+  const extracted = await getDirectLink(player.url);
+  // const players = await playerAction.getDirectLinks({ mediaId: media.id });
+  // const player = players?.[valid.data.player];
+  // TODO: DELETE VIDSTACK
 
   return (
     <div>
       <div className="aspect-video w-full max-w-md">
-        {player?.type === "embed" ? (
+        {extracted.type === "iframe" ? (
           <iframe src={player.url}></iframe>
         ) : (
-          <Player url={player?.url} />
+          <Player data={extracted} />
         )}
       </div>
 
       <ul className="flex flex-col">
-        {players?.map((item, index) => (
+        {media.players?.map((item, index) => (
           <Link
             key={index}
             href={`?id=${media.id}&type=${media.type}&player=${index}`}
