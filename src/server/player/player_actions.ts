@@ -33,6 +33,8 @@ const DOMAINS = [
 ] as const;
 
 export const getDirectLink = async (url: string): Promise<ExtractedLink> => {
+  if (!url) return { url, ref: "#", type: "iframe" };
+
   const hostname = new URL(url).hostname;
   const host = DOMAINS.find((item) =>
     item.domains.some((keyword) => hostname.match(keyword)),
