@@ -29,7 +29,7 @@ const WatchPage = async ({ searchParams }: Props) => {
   // TODO: DELETE VIDSTACK
 
   return (
-    <div>
+    <div className="flex flex-col gap-4 p-4">
       <div className="aspect-video w-full max-w-md">
         {extracted.type === "iframe" ? (
           <iframe src={player.url}></iframe>

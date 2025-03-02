@@ -29,7 +29,27 @@ const Player = ({ data }: Props) => {
           }
         },
       },
+      fullscreen: true,
+      volume: 0.5,
+      autoMini: true,
+      playbackRate: true,
+      aspectRatio: true,
+      miniProgressBar: true,
+      mutex: true,
+      backdrop: true,
+      playsInline: true,
+      autoPlayback: true,
+      airplay: true,
+      theme: "#23ade5",
+      moreVideoAttr: { crossOrigin: "anonymous" },
+      lang: navigator.language.toLowerCase(),
       url: data.url,
+      icons: {
+        state:
+          '<img width="150" heigth="150" src="https://artplayer.org/assets/img/state.svg">',
+        indicator:
+          '<img width="16" heigth="16" src="https://artplayer.org/assets/img/indicator.svg">',
+      },
     });
 
     return () => {
@@ -38,7 +58,9 @@ const Player = ({ data }: Props) => {
   }, [data.type, data.url]);
 
   return (
-    <div id="player" ref={artRef} className="aspect-video w-[300px]"></div>
+    <div className="aspect-video w-full overflow-hidden rounded-md">
+      <div id="player" ref={artRef} className="size-full"></div>
+    </div>
   );
 };
 

@@ -99,7 +99,6 @@ class PlayerService {
       const endpoint = `${this.apiUrl}/${host}/${encodeURIComponent(url)}`;
       const res = await fetch(endpoint);
       const data = (await res.json()) as ExtractedLink;
-      
       if (!data.url) throw new Error("Something went wrong");
 
       const directLink = `${this.apiUrl}/proxy/${data.type}?url=${encodeURIComponent(data.url)}&ref=${encodeURIComponent(data.ref)}`;
