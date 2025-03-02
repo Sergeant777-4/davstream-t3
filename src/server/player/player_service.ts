@@ -91,15 +91,24 @@ class PlayerService {
     return filtered;
   };
 
-  extractDirectLink = async (url: string, host: string) => {
-    const endpoint = `${this.apiUrl}/${host}/${encodeURIComponent(url)}`;
+  extractDirectLink = async (
+    url: string,
+    host: string,
+  ): Promise<ExtractedLink> => {
+    try {
+      const endpoint = `${this.apiUrl}/${host}/${encodeURIComponent(url)}`;
+      const res = await fetch(endpoint);
+      const data = (await res.json()) as ExtractedLink;
+      
+      if (!data.url) throw new Error("Something went wrong");
 
-    const res = await fetch(endpoint);
-    const data = (await res.json()) as ExtractedLink;
+      const directLink = `${this.apiUrl}/proxy/${data.type}?url=${encodeURIComponent(data.url)}&ref=${encodeURIComponent(data.ref)}`;
 
-    const directLink = `${this.apiUrl}/proxy/${data.type}?url=${encodeURIComponent(data.url)}&ref=${encodeURIComponent(data.ref)}`;
-
-    return { ...data, url: directLink };
+      return { ref: data.ref, type: data.type, url: directLink };
+    } catch (error) {
+      console.error(error);
+      return { ref: "#", type: "iframe", url: url };
+    }
   };
 }
 

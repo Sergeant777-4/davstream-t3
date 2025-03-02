@@ -1,24 +1,24 @@
 export const dynamic = "force-dynamic";
 import type { NextRequest } from "next/server";
 
-const headers = {
-  Accept: "*/*",
-  "Accept-Encoding": "gzip, deflate, br",
-  "Accept-Language": "en-US,en;q=0.5",
-  "User-Agent":
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:135.0) Gecko/20100101 Firefox/135.0",
-  DNT: "1",
-  Connection: "keep-alive",
-  "Sec-Fetch-Dest": "empty",
-  "Sec-Fetch-Mode": "cors",
-  "Sec-Fetch-Site": "cross-site",
-  Pragma: "no-cache",
-  "Cache-Control": "no-cache",
-  "Upgrade-Insecure-Requests": "1",
-  Priority: "u=4",
-  TE: "trailers",
-  "X-Requested-With": "XMLHttpRequest",
-};
+// const headers = {
+//   Accept: "*/*",
+//   "Accept-Encoding": "gzip, deflate, br",
+//   "Accept-Language": "en-US,en;q=0.5",
+//   "User-Agent":
+//     "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:135.0) Gecko/20100101 Firefox/135.0",
+//   DNT: "1",
+//   Connection: "keep-alive",
+//   "Sec-Fetch-Dest": "empty",
+//   "Sec-Fetch-Mode": "cors",
+//   "Sec-Fetch-Site": "cross-site",
+//   Pragma: "no-cache",
+//   "Cache-Control": "no-cache",
+//   "Upgrade-Insecure-Requests": "1",
+//   Priority: "u=4",
+//   TE: "trailers",
+//   "X-Requested-With": "XMLHttpRequest",
+// };
 
 export const GET = async (request: NextRequest) => {
   try {
@@ -32,13 +32,15 @@ export const GET = async (request: NextRequest) => {
     const ref = encodedRef ? decodeURIComponent(encodedRef) : baseUrl.origin;
 
     const res = await fetch(url, {
+      ...request,
       headers: {
-        "sec-fetch-dest": "video",
-        range: "bytes=0-",
+        ...request.headers,
+        Host: baseUrl.host,
         Referer: ref,
         Origin: ref,
-        Host: baseUrl.host,
-        ...headers,
+        range: "bytes=0-",
+        "sec-fetch-dest": "video",
+        // ...headers,
       },
       cache: "no-cache",
     });
