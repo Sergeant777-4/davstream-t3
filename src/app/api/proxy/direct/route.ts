@@ -31,29 +31,37 @@ export const GET = async (request: NextRequest) => {
     const baseUrl = new URL(url);
     const ref = encodedRef ? decodeURIComponent(encodedRef) : baseUrl.origin;
 
-    const res = await fetch(url, {
-      headers: {
-        Referer: ref,
-        range: request.headers.get("range") || "bytes=0-",
-        // accept: "*/*",
-        // "accept-language": "en-US,en;q=0.9",
-        // "sec-fetch-dest": "video",
-        // "sec-fetch-mode": "no-cors",
-        // "sec-fetch-site": "same-site",
-        // "sec-ch-ua-mobile": "?0",
-        // "sec-ch-ua-platform": '"Windows"',
-        // "sec-ch-ua":
-        //   '"Not(A:Brand";v="99", "Google Chrome";v="133", "Chromium";v="133"',
-        // TE: "trailers",
-        // Pragma: "no-cache",
-        // "cache-control": "no-cache",
-        // "Referrer-Policy": "strict-origin-when-cross-origin",
-      },
-      cache: "no-store",
-    });
+    await new Promise((resolve) => setTimeout(resolve, 300));
 
-    return new Response(res.body);
+    const proxyHeaders = {
+      "User-Agent":
+        request.headers.get("user-agent") ||
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:135.0) Gecko/20100101 Firefox/135.0",
+      Accept: request.headers.get("accept") || "*/*",
+      Referer: ref || request.headers.get("referer") || "",
+      Range: request.headers.get("range") || "bytes=0-",
+    };
+    const res = await fetch(url, { headers: proxyHeaders });
+
+    return new Response(res.body, {
+      status: res.status,
+      headers: res.headers,
+    });
   } catch (error) {
     return Response.json({ error }, { status: 500 });
   }
 };
+
+// accept: "*/*",
+// "accept-language": "en-US,en;q=0.9",
+// "sec-fetch-dest": "video",
+// "sec-fetch-mode": "no-cors",
+// "sec-fetch-site": "same-site",
+// "sec-ch-ua-mobile": "?0",
+// "sec-ch-ua-platform": '"Windows"',
+// "sec-ch-ua":
+//   '"Not(A:Brand";v="99", "Google Chrome";v="133", "Chromium";v="133"',
+// TE: "trailers",
+// Pragma: "no-cache",
+// "cache-control": "no-cache",
+// "Referrer-Policy": "strict-origin-when-cross-origin",
