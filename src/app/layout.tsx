@@ -1,5 +1,5 @@
 import "~/styles/globals.css";
-
+import NextTopLoader from "nextjs-toploader";
 import { GeistSans } from "geist/font/sans";
 import { type Metadata } from "next";
 import Navbar from "~/components/layout/navbar";
@@ -19,6 +19,7 @@ export default function RootLayout({
       className={`dark min-h-svh w-screen overflow-x-hidden ${GeistSans.variable}`}
     >
       <body className="flex flex-col">
+        <NextTopLoader />
         <Navbar />
         {children}
       </body>

@@ -27,10 +27,14 @@ class PlayerService {
   };
 
   getHost = (url: string) => {
+    if (!url) return null;
     const hostname = new URL(url).hostname;
+
     const host = DOMAINS.find((item) =>
       item.domains.some((keyword) => hostname.match(keyword)),
     )?.name;
+    if (!host) return null;
+
     return host;
   };
 

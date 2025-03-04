@@ -10,7 +10,7 @@ export const getRecommendations = async (id: number) => {
   if (!media) throw new Error("Media not found");
 
   const recommendations = await mediaService.findManyByTmdbIds({
-    tmdbIds: media.recommendations.slice(0, limit + 1),
+    tmdbIds: media.recommendations.slice(0, limit),
     type: media.type,
   });
 
@@ -25,7 +25,7 @@ export const getSimilars = async (id: number) => {
   if (!media) throw new Error("Media not found");
 
   const similars = await mediaService.findManyByTmdbIds({
-    tmdbIds: media.similars.slice(0, limit + 1),
+    tmdbIds: media.similars.slice(0, limit),
     type: media.type,
   });
 

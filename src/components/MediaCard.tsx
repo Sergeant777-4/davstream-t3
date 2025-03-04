@@ -1,10 +1,11 @@
-import type { Media } from "@prisma/client";
 import { Star } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { Badge } from "~/components/ui/badge";
+import type { MediaSelectType } from "~/server/media/media_service";
 
-type Props = { data: Media };
+type Props = { data: MediaSelectType };
+
 const MediaCard = ({ data }: Props) => {
   return (
     <Link

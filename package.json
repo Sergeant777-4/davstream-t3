@@ -47,6 +47,7 @@
     "lucide-react": "^0.476.0",
     "m3u8-parser": "^7.2.0",
     "next": "^15.0.1",
+    "nextjs-toploader": "^3.7.15",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-hook-form": "^7.54.2",

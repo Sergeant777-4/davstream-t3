@@ -8,19 +8,11 @@ export const DOMAINS = [
     domains: ["uqload"],
   },
   {
-    name: "doodstream",
-    domains: ["doodstream", "dooodster"],
-  },
-  {
     name: "lulustream",
     domains: ["luluvdo"],
   },
   {
     name: "oneupload",
-    domains: ["oneupload", "tipfly"],
-  },
-  {
-    name: "darkibox",
     domains: ["oneupload", "tipfly"],
   },
   {

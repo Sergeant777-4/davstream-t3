@@ -3,9 +3,9 @@ import { useEffect, useRef } from "react";
 import Artplayer from "artplayer";
 import Hls from "hls.js";
 
-type Props = { data: ExtractedLink };
+type Props = { data: ExtractedLink; poster: string };
 
-const Player = ({ data }: Props) => {
+const Player = ({ data, poster }: Props) => {
   const artRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -41,6 +41,7 @@ const Player = ({ data }: Props) => {
       playsInline: true,
       autoPlayback: true,
       airplay: true,
+      poster: poster,
       theme: "#23ade5",
       moreVideoAttr: { crossOrigin: "anonymous" },
       lang: navigator.language.toLowerCase(),
@@ -56,7 +57,7 @@ const Player = ({ data }: Props) => {
     return () => {
       if (art?.destroy) art.destroy(false);
     };
-  }, [data.type, data.url]);
+  }, [data.type, data.url, poster]);
 
   return <div id="player" ref={artRef} className="size-full"></div>;
 };
