@@ -97,16 +97,14 @@ class PlayerService {
   ): Promise<ExtractedLink> => {
     try {
       const endpoint = `${this.apiUrl}/${host}/${encodeURIComponent(url)}`;
-      const res = await fetch(endpoint);
+      const res = await fetch(endpoint, {
+        next: { revalidate: 1 },
+        cache: "no-cache",
+        keepalive: true,
+      });
+
       const data = (await res.json()) as ExtractedLink;
       if (!data.url) throw new Error("Something went wrong");
-
-      // if (data.type === "direct")
-      //   return {
-      //     ref: data.ref,
-      //     type: "direct",
-      //     url: `https://cors-anywhere.cinepulse.fr/${data.url}`,
-      //   };
 
       const directLink = `${this.apiUrl}/proxy/${data.type}?url=${encodeURIComponent(data.url)}&ref=${encodeURIComponent(data.ref)}`;
 

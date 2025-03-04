@@ -1,55 +1,45 @@
 export const dynamic = "force-dynamic";
 import { Parser } from "m3u8-parser";
 import type { NextRequest } from "next/server";
-import { env } from "~/env";
-import { serializeM3U8 } from "~/lib/utils";
+import { getLinks, serializeM3U8 } from "~/lib/utils";
 
-// const headers = {
-//   Accept: "*/*",
-//   "Accept-Encoding": "gzip, deflate, br",
-//   "Accept-Language": "en-US,en;q=0.5",
-//   "User-Agent":
-//     "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:135.0) Gecko/20100101 Firefox/135.0",
-//   DNT: "1",
-//   Connection: "keep-alive",
-//   "Sec-Fetch-Dest": "empty",
-//   "Sec-Fetch-Mode": "cors",
-//   "Sec-Fetch-Site": "cross-site",
-//   Pragma: "no-cache",
-//   "Cache-Control": "no-store, no-cache, must-revalidate, max-age=0",
-//   "Upgrade-Insecure-Requests": "1",
-//   Priority: "u=4",
-//   TE: "trailers",
-//   "X-Requested-With": "XMLHttpRequest",
-// };
-
-const getLinks = (payload: { newUri: string; ref: string; isTs: boolean }) => {
-  const apiUrl = env.API_URL;
-  return payload.isTs
-    ? `${apiUrl}/proxy/direct?url=${encodeURIComponent(payload.newUri)}&ref=${encodeURIComponent(payload.ref)}`
-    : `${apiUrl}/proxy/hls?url=${encodeURIComponent(payload.newUri)}&ref=${encodeURIComponent(payload.ref)}`;
+const headers = {
+  dnt: "1",
+  accept: "*/*",
+  "accept-language": "en-US,en;q=0.5",
+  "accept-encoding": "gzip, deflate, br",
+  "sec-fetch-dest": "empty",
+  "sec-fetch-mode": "cors",
+  "sec-fetch-site": "cross-site",
+  "user-agent":
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:135.0) Gecko/20100101 Firefox/135.0",
+  connection: "keep-alive",
+  pragma: "no-cache",
+  "cache-control": "no-cache",
 };
 
 export const GET = async (request: NextRequest) => {
   try {
     const searchParams = request.nextUrl.searchParams;
+
     const encodedUrl = searchParams.get("url");
-    const encodedRef = searchParams.get("ref");
     if (!encodedUrl) throw new Error("URL is required");
+
+    const encodedRef = searchParams.get("ref");
 
     const url = decodeURIComponent(encodedUrl);
     const baseUrl = new URL(url);
     const ref = encodedRef ? decodeURIComponent(encodedRef) : baseUrl.origin;
 
     const res = await fetch(url, {
-      ...request,
       headers: {
+        ...headers,
         Host: baseUrl.origin,
         Referer: ref,
         Origin: ref,
       },
-      cache: "no-cache",
       next: { revalidate: 1 },
+      cache: "no-cache",
       keepalive: true,
       mode: "no-cors",
       referrer: ref,

@@ -2,6 +2,7 @@
 import { clsx, type ClassValue } from "clsx";
 import type { Manifest } from "m3u8-parser";
 import { twMerge } from "tailwind-merge";
+import { env } from "~/env";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -94,4 +95,14 @@ export const serializeM3U8 = (manifest: Manifest): string => {
   if (manifest.endList) output += "#EXT-X-ENDLIST\n";
 
   return output;
+};
+
+export const getLinks = (payload: {
+  newUri: string;
+  ref: string;
+  isTs: boolean;
+}) => {
+  return payload.isTs
+    ? `${env.API_URL}/proxy/direct?url=${encodeURIComponent(payload.newUri)}&ref=${encodeURIComponent(payload.ref)}`
+    : `${env.API_URL}/proxy/hls?url=${encodeURIComponent(payload.newUri)}&ref=${encodeURIComponent(payload.ref)}`;
 };

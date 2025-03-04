@@ -1,39 +1,37 @@
 export const dynamic = "force-dynamic";
 
 const headers = {
-  "User-Agent":
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36",
-  "Accept-Language": "en-US,en;q=0.5",
-  "Accept-Encoding": "gzip, deflate, br",
-  Accept: "*/*",
-  DNT: "1",
-  Connection: "keep-alive",
-  "Sec-Fetch-Dest": "iframe",
-  "Sec-Fetch-Mode": "navigate",
-  "Sec-Fetch-Site": "cross-site",
-  Pragma: "no-cache",
-  "Cache-Control": "no-cache",
-  "Upgrade-Insecure-Requests": "1",
-  Priority: "u=4",
-  TE: "trailers",
-  "X-Requested-With": "XMLHttpRequest",
+  dnt: "1",
+  host: "maxfinishseveral.com",
+  accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+  "user-agent":
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:135.0) Gecko/20100101 Firefox/135.0",
+  "accept-language": "en-US,en;q=0.5",
+  "accept-encoding": "gzip, deflate, br",
+  connection: "keep-alive",
+  "sec-fetch-dest": "document",
+  "sec-fetch-mode": "navigate",
+  "sec-fetch-site": "none",
+  "sec-fetch-user": "?1",
+  pragma: "no-cache",
+  "cache-control": "no-cache",
+  "upgrade-insecure-requests": "1",
+  te: "trailers",
 };
 
 export const GET = async (
   _: Request,
   { params }: { params: Promise<{ iframeLink: string }> },
 ) => {
-  // voe: https://maxfinishseveral.com/e/3smqgedolfsz
   const iframeLink = decodeURIComponent((await params).iframeLink);
   const iframeBaseURL = new URL(iframeLink);
 
   const res = await fetch(iframeLink, {
-    headers: {
-      referer: iframeBaseURL.origin,
-      origin: iframeBaseURL.origin,
-      ...headers,
-    },
+    next: { revalidate: 1 },
     cache: "no-cache",
+    keepalive: true,
+    mode: "no-cors",
+    headers,
   });
 
   const dummyPage = await res.text();
@@ -41,12 +39,11 @@ export const GET = async (
   const redirectUrl = dummyRegex.exec(dummyPage)?.[1];
 
   const res2 = await fetch(redirectUrl || iframeLink, {
-    headers: {
-      referer: iframeBaseURL.origin,
-      origin: iframeBaseURL.origin,
-      ...headers,
-    },
+    next: { revalidate: 1 },
     cache: "no-cache",
+    keepalive: true,
+    mode: "no-cors",
+    headers,
   });
   const document = await res2.text();
 
