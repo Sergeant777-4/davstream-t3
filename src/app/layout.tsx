@@ -2,6 +2,7 @@ import "~/styles/globals.css";
 
 import { GeistSans } from "geist/font/sans";
 import { type Metadata } from "next";
+import Navbar from "~/components/layout/navbar";
 
 export const metadata: Metadata = {
   title: "Create T3 App",
@@ -17,7 +18,10 @@ export default function RootLayout({
       lang="fr"
       className={`dark min-h-svh w-screen overflow-x-hidden ${GeistSans.variable}`}
     >
-      <body>{children}</body>
+      <body className="flex flex-col">
+        <Navbar />
+        {children}
+      </body>
     </html>
   );
 }

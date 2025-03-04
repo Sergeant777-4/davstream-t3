@@ -7,6 +7,11 @@ export default {
   content: ["./src/**/*.tsx"],
   theme: {
     extend: {
+      container: {
+        center: true,
+        padding: ".5rem",
+        screens: ["1440px"],
+      },
       fontFamily: {
         sans: ["var(--font-geist-sans)", ...fontFamily.sans],
       },

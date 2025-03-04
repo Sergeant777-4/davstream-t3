@@ -1,37 +1,7 @@
-import type { Prisma, TypeEnum } from "@prisma/client";
+import type { Prisma } from "@prisma/client";
 import { env } from "~/env";
+import { DOMAINS } from "~/lib/constants";
 import { db } from "~/server/db";
-
-export const DOMAINS = [
-  {
-    name: "voe",
-    domains: ["robertordercharacter", "maxfinishseveral", "voe"],
-  },
-  {
-    name: "uqload",
-    domains: ["uqload"],
-  },
-  {
-    name: "doodstream",
-    domains: ["doodstream", "dooodster"],
-  },
-  {
-    name: "lulustream",
-    domains: ["luluvdo"],
-  },
-  {
-    name: "oneupload",
-    domains: ["oneupload", "tipfly"],
-  },
-  {
-    name: "darkibox",
-    domains: ["oneupload", "tipfly"],
-  },
-  {
-    name: "vidmoly",
-    domains: ["vidmoly"],
-  },
-] as const;
 
 class PlayerService {
   apiUrl = env.API_URL;
@@ -64,39 +34,12 @@ class PlayerService {
     return host;
   };
 
-  // TODO: IMPROVE THIS LOGIC
-  getAllMediaLinks = async (id: number, type: TypeEnum) => {
-    const players =
-      type === "MOVIE"
-        ? await this.getMediaPlayers(id)
-        : await this.getEpisodePlayers(id);
-
-    const resultsPromise = players.map(async (player) => {
-      try {
-        const host = this.getHost(player.url);
-        if (!host) throw new Error(`Host not identified ${player.url}`);
-        const extractedData = await this.extractDirectLink(player.url, host);
-        return { ...player, ...extractedData };
-      } catch (error) {
-        console.warn(error);
-        return { ...player, type: "embed" };
-      }
-    });
-    const results = await Promise.all(resultsPromise);
-
-    const filtered = results.filter(
-      (item) => item !== null && item !== undefined,
-    );
-
-    return filtered;
-  };
-
   extractDirectLink = async (
     url: string,
     host: string,
   ): Promise<ExtractedLink> => {
     try {
-      const endpoint = `${this.apiUrl}/${host}/${encodeURIComponent(url)}`;
+      const endpoint = `${this.apiUrl}/extractors/${host}/${encodeURIComponent(url)}`;
       const res = await fetch(endpoint, {
         next: { revalidate: 1 },
         cache: "no-cache",

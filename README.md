@@ -1,29 +1,75 @@
-# Create T3 App
+// LULUSTREAM EXTRACTOR
+extractorRoute.get("/lulustream/:encodedUrl", async (c) => {
+const encodedUrl = c.req.param("encodedUrl");
+const url = decodeURIComponent(encodedUrl);
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+    const res = await fetch(url, { headers: { Referer: url, ...HEADERS } });
+    const html = await res.text();
+    const regex = /sources:\s+\[\{file:"(.*)"\}\],/gm;
 
-## What's next? How do I make an app with this?
+    const m3uLink = regex.exec(html)?.[1];
+    if (!m3uLink) throw new Error("M3U8 link not found");
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+    return c.json({ type: "hls", url: m3uLink, host: "lulustream" });
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+});
 
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Drizzle](https://orm.drizzle.team)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+// ONEUPLOAD EXTRACTOR
+extractorRoute.get("/oneupload/:encodedUrl", async (c) => {
+const encodedUrl = c.req.param("encodedUrl");
+const url = decodeURIComponent(encodedUrl);
 
-## Learn More
+    const res = await fetch(url, { headers: { Referer: url, ...HEADERS } });
+    const html = await res.text();
+    const regex = /sources:\s+\[\{file:"(.*)"\}\],/gm;
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+    const m3uLink = regex.exec(html)?.[1];
+    if (!m3uLink) throw new Error("M3U8 link not found");
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+    return c.json({ type: "hls", url: m3uLink, host: "oneupload" });
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
+});
 
-## How do I deploy this?
+// DARKIBOX EXTRACTOR
+extractorRoute.get("/darkibox/:encodedUrl", async (c) => {
+const encodedUrl = c.req.param("encodedUrl");
+const url = decodeURIComponent(encodedUrl);
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+    const res = await fetch(url, { headers: { Referer: url, ...HEADERS } });
+    const html = await res.text();
+    const regex = /sources:\s+\[\{src:\s+"(.*)",\s+type/gm;
+
+    const m3uLink = regex.exec(html)?.[1];
+    if (!m3uLink) throw new Error("M3U8 link not found");
+
+    return c.json({ type: "hls", url: m3uLink, host: "darkibox" });
+
+});
+
+// VIDMOLY EXTRACTOR
+extractorRoute.get("/vidmoly/:encodedUrl", async (c) => {
+const encodedUrl = c.req.param("encodedUrl");
+const url = decodeURIComponent(encodedUrl);
+
+    const res = await fetch(url, {
+      headers: {
+        ...HEADERS,
+        "sec-fetch-dest": "iframe",
+        Referer: url,
+      },
+    });
+
+    const html = await res.text();
+    const regex = /sources:\s+\[\{file:"(.*)"\}\]/gm;
+
+    const m3uLink = regex.exec(html)?.[1];
+    if (!m3uLink) throw new Error("M3U8 link not found");
+
+    return c.json({
+      type: "hls",
+      url: m3uLink,
+      host: "vidmoly",
+      referer: "https://vidmoly.to",
+    });
+
+});

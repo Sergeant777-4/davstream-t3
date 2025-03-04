@@ -11,7 +11,6 @@ const Player = ({ data }: Props) => {
   useEffect(() => {
     const art = new Artplayer({
       container: artRef.current || "#player",
-      // type: data.type === "hls" ? "m3u8" : "mpd",
       ...(data.type === "hls" && {
         type: "m3u8",
         customType: {
@@ -33,7 +32,6 @@ const Player = ({ data }: Props) => {
         },
       }),
       fullscreen: true,
-      volume: 0.5,
       autoMini: true,
       playbackRate: true,
       aspectRatio: true,
@@ -60,13 +58,7 @@ const Player = ({ data }: Props) => {
     };
   }, [data.type, data.url]);
 
-  return (
-    <>
-      <div className="aspect-video w-full overflow-hidden rounded-md">
-        <div id="player" ref={artRef} className="size-full"></div>
-      </div>
-    </>
-  );
+  return <div id="player" ref={artRef} className="size-full"></div>;
 };
 
 export default Player;
