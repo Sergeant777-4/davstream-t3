@@ -4,7 +4,7 @@ import mediaService from "~/server/media/media_service";
 
 export const getRecommendations = async (id: number) => {
   if (isNaN(id) || id < 1) throw new Error("Invalid ID");
-  const limit = 4;
+  const limit = 5;
 
   const media = await mediaService.findById(id);
   if (!media) throw new Error("Media not found");
@@ -19,7 +19,7 @@ export const getRecommendations = async (id: number) => {
 
 export const getSimilars = async (id: number) => {
   if (isNaN(id) || id < 1) throw new Error("Invalid ID");
-  const limit = 4;
+  const limit = 5;
 
   const media = await mediaService.findById(id);
   if (!media) throw new Error("Media not found");
