@@ -32,6 +32,9 @@ const Player = ({ data, poster }: Props) => {
         },
       }),
       fullscreen: true,
+      pip: true,
+      screenshot: true,
+      setting: true,
       playbackRate: true,
       aspectRatio: true,
       miniProgressBar: true,
@@ -58,7 +61,9 @@ const Player = ({ data, poster }: Props) => {
     };
   }, [data.type, data.url, poster]);
 
-  return <div id="player" ref={artRef} className="size-full"></div>;
+  return (
+    <div id="player" ref={artRef} className="relative -z-0 size-full"></div>
+  );
 };
 
 export default Player;

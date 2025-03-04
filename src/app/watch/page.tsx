@@ -4,12 +4,14 @@ import { Suspense } from "react";
 import * as z from "zod";
 import MediaHCard from "~/components/MediaHCard";
 import Player from "~/components/Player";
+import TrailerPlayer from "~/components/TrailerPlayer";
 import { Button } from "~/components/ui/button";
 import { Card } from "~/components/ui/card";
 import { cn } from "~/lib/utils";
 import {
   getMediaDetails,
   getRecommendations,
+  getSimilars,
 } from "~/server/media/media_actions";
 import { getDirectLink } from "~/server/player/player_actions";
 import playerService from "~/server/player/player_service";
@@ -73,11 +75,23 @@ const WatchPage = async ({ searchParams }: Props) => {
         </ul>
       </section>
 
-      <aside className="w-full max-w-[350px]">
+      <aside className="flex w-full flex-col gap-4 lg:max-w-[350px]">
+        <div>
+          <p className="font-medium">Bande annonce</p>
+          <TrailerPlayer url={media.trailerUrl || ""} />
+        </div>
+
         <div className="flex flex-col gap-2">
           <p className="font-medium">Recommendations</p>
           <Suspense fallback="loading">
             <Recommendations mediaId={media.id} />
+          </Suspense>
+        </div>
+
+        <div className="flex flex-col gap-2">
+          <p className="font-medium">Similars</p>
+          <Suspense fallback="loading">
+            <Similars mediaId={media.id} />
           </Suspense>
         </div>
       </aside>
@@ -90,6 +104,17 @@ const Recommendations = async ({ mediaId }: { mediaId: number }) => {
   return (
     <>
       {data.recommendations.map((item) => (
+        <MediaHCard media={item} key={item.id} />
+      ))}
+    </>
+  );
+};
+
+const Similars = async ({ mediaId }: { mediaId: number }) => {
+  const data = await getSimilars(mediaId);
+  return (
+    <>
+      {data.similars.map((item) => (
         <MediaHCard media={item} key={item.id} />
       ))}
     </>
