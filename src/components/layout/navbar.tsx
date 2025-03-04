@@ -5,7 +5,7 @@ import { Button } from "~/components/ui/button";
 const Navbar = () => {
   return (
     <nav className="bg-dark-1 sticky left-0 top-0 z-10 flex w-full items-center justify-center border-b bg-black">
-      <div className="container flex h-full min-h-16 items-center justify-between gap-4">
+      <div className="container flex h-full min-h-14 items-center justify-between gap-4">
         <Link
           prefetch={false}
           href={"/"}

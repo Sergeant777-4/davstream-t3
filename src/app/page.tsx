@@ -5,7 +5,7 @@ const Home = async () => {
   const data = await getPopular();
 
   return (
-    <main className="container py-4">
+    <main className="container py-2">
       <div className="cartoon-grid">
         {data.results.map((item) => (
           <MediaCard key={item.id} data={item} />
