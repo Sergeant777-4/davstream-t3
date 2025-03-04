@@ -1,6 +1,21 @@
 import type { Prisma, TypeEnum } from "@prisma/client";
 import { db } from "~/server/db";
 
+export type MediaSelectType = Prisma.MediaGetPayload<{
+  select: {
+    id: true;
+    type: true;
+    title: true;
+    releaseDate: true;
+    posterPath: true;
+    tmdbRating: true;
+    backdropPath: true;
+    overview: true;
+    recommendations: true;
+    similars: true;
+  };
+}>;
+
 class MediaService {
   mediaSelect: Prisma.MediaSelect = {
     id: true,
@@ -8,7 +23,11 @@ class MediaService {
     title: true,
     releaseDate: true,
     posterPath: true,
+    backdropPath: true,
     tmdbRating: true,
+    overview: true,
+    recommendations: true,
+    similars: true,
   };
 
   upsert = async (insertData: Prisma.MediaCreateInput) => {
@@ -24,41 +43,39 @@ class MediaService {
     });
   };
 
-  findByTmdbId = async ({
-    tmdbId,
-    type,
-  }: {
-    tmdbId: number;
-    type: TypeEnum;
-  }) => {
-    return await db.media.findUnique({
-      where: { tmdbId_type: { tmdbId, type } },
+  findByTmdbId = async (payload: { tmdbId: number; type: TypeEnum }) => {
+    const media = await db.media.findUnique({
+      where: { tmdbId_type: payload },
+      select: this.mediaSelect,
     });
+    return media as MediaSelectType;
   };
 
   findById = async (id: number) => {
+    const media = await db.media.findUnique({
+      where: { id },
+      select: this.mediaSelect,
+    });
+    return media as MediaSelectType;
+  };
+
+  getDetails = async (id: number) => {
     return await db.media.findUnique({
       where: { id },
       include: {
+        watchProviders: true,
+        collection: true,
         players: true,
         seasons: true,
-        collection: true,
         genres: true,
-        watchProviders: true,
       },
     });
   };
 
-  getSeason = async ({
-    mediaId,
-    number,
-  }: {
-    mediaId: number;
-    number: number;
-  }) => {
+  getSeason = async (payload: { mediaId: number; number: number }) => {
     return await db.season.findUnique({
       include: { episodes: { orderBy: { number: "asc" } } },
-      where: { mediaId_number: { mediaId, number } },
+      where: { mediaId_number: payload },
     });
   };
 
@@ -66,66 +83,18 @@ class MediaService {
     return await db.player.findMany({ where: { mediaId } });
   };
 
-  findManyByTmdbIds = async (tmdbIds: number[], type: TypeEnum) => {
-    return await db.media.findMany({
-      where: { AND: [{ type: type }, { tmdbId: { in: tmdbIds } }] },
-      select: this.mediaSelect,
+  findManyByTmdbIds = async (payload: {
+    tmdbIds: number[];
+    type: TypeEnum;
+  }) => {
+    const media = await db.media.findMany({
+      where: {
+        AND: [{ type: payload.type }, { tmdbId: { in: payload.tmdbIds } }],
+      },
       orderBy: { popularity: "desc" },
-      take: 10,
+      select: this.mediaSelect,
     });
-  };
-
-  getRecommendations = async (id: number) => {
-    const media = await db.media.findUnique({
-      select: {
-        tmdbRating: true,
-        title: true,
-        type: true,
-        recommendations: true,
-        releaseDate: true,
-      },
-      where: { id },
-    });
-    if (!media) throw new Error("Media not found");
-
-    const results = await this.findManyByTmdbIds(
-      media.recommendations,
-      media.type,
-    );
-
-    return {
-      id,
-      type: media.type,
-      title: media.title,
-      releaseDate: media.releaseDate,
-      tmdbRating: media.tmdbRating,
-      results,
-    };
-  };
-
-  getSimilars = async (id: number) => {
-    const media = await db.media.findUnique({
-      select: {
-        tmdbRating: true,
-        title: true,
-        type: true,
-        similars: true,
-        releaseDate: true,
-      },
-      where: { id },
-    });
-    if (!media) throw new Error("Media not found");
-
-    const results = await this.findManyByTmdbIds(media.similars, media.type);
-
-    return {
-      id,
-      type: media.type,
-      title: media.title,
-      releaseDate: media.releaseDate,
-      tmdbRating: media.tmdbRating,
-      results,
-    };
+    return media as MediaSelectType[];
   };
 
   count = async (where?: Prisma.MediaWhereInput) => {
@@ -133,23 +102,26 @@ class MediaService {
   };
 
   getTrending = async ({ limit, page }: { limit: number; page: number }) => {
+    const totalResults = await this.count();
     const trending = await db.media.findMany({
       orderBy: [{ releaseDate: "desc" }, { popularity: "desc" }],
       select: this.mediaSelect,
       skip: (page - 1) * limit,
       take: limit,
     });
-    return trending;
+    return { trending, totalResults };
   };
 
   getPopulars = async ({ limit, page }: { limit: number; page: number }) => {
+    const totalResults = await this.count();
     const populars = await db.media.findMany({
       orderBy: [{ popularity: "desc" }, { releaseDate: "desc" }],
       select: this.mediaSelect,
       skip: (page - 1) * limit,
       take: limit,
     });
-    return populars;
+
+    return { populars, totalResults };
   };
 
   delete = async ({ tmdbId, type }: { tmdbId: number; type: TypeEnum }) => {
@@ -167,8 +139,13 @@ class MediaService {
     limit: number;
     page: number;
   }) => {
-    const count = await this.count();
     const offset = (page - 1) * limit;
+
+    const totalResults = await db.$queryRaw`
+    SELECT COUNT(*) AS total_count FROM "Media"
+    WHERE SIMILARITY(title, ${query}) > 0.14
+       OR SIMILARITY("originalTitle", ${query}) > 0.14
+       OR SIMILARITY("alternativeTitles", ${query}) > 0.14;`;
 
     const results = await db.$queryRaw`
     SELECT GREATEST(SIMILARITY(title, ${query}),
@@ -181,7 +158,10 @@ class MediaService {
     ORDER BY score DESC
     LIMIT ${limit} OFFSET ${offset};`;
 
-    return { count, results };
+    return {
+      results: results as MediaSelectType[],
+      totalResults: totalResults as number,
+    };
   };
 }
 

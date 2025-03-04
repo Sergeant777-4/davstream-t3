@@ -31,7 +31,6 @@ export const GET = async (
       next: { revalidate: 1 },
       cache: "no-cache",
       keepalive: true,
-      mode: "no-cors",
       headers,
     });
 

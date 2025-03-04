@@ -27,12 +27,6 @@ const Navbar = () => {
                 Watchlist
               </Link>
             </Button>
-
-            <Button variant={"ghost"} asChild>
-              <a target="_blank" href={"https://discord.gg/M7gRTuXc6d"}>
-                Communauté
-              </a>
-            </Button>
           </div>
         </div>
       </div>

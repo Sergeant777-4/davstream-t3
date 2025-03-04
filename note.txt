@@ -1,0 +1,124 @@
+Structure:
+/api
+ ├── /media
+ │   ├── GET  /popular
+ │   ├── GET  /details/:id/:type
+ │   ├── GET  /search?q={query}&page={page}
+ │   ├── GET  /trending
+ │   ├── GET  /genres
+ │   ├── GET  /genre/:genreId
+ ├── /seasons
+ │   ├── GET  /:mediaId
+ │   ├── GET  /:mediaId/:seasonNumber
+ ├── /episodes
+ │   ├── GET  /:mediaId/:seasonNumber
+ │   ├── GET  /:mediaId/:seasonNumber/:episodeNumber
+ ├── /players
+ │   ├── GET  /:episodeId
+ ├── /user
+ │   ├── POST /register
+ │   ├── POST /login
+ │   ├── GET  /profile
+ │   ├── POST /watchlist
+ │   ├── DELETE /watchlist/:mediaId
+ │   ├── GET  /watchlist
+ ├── /reports
+ │   ├── POST /bug
+ │   ├── POST /content
+
+
+/api/media/popular
+type PopularResponse = {
+  page: number
+  totalPages: number
+  totalResults: number
+  results: Media[]
+}
+type Media = {
+  id: number
+  type: 'movie' | 'tv'
+  title: string
+  poster: string
+  releaseDate: string
+  rating: number
+}
+
+/api/media/details/:id/:type
+type MediaDetails = {
+  id: number
+  type: 'movie' | 'tv'
+  title: string
+  overview: string
+  poster: string
+  backdrop: string
+  releaseDate: string
+  genres: string[]
+  rating: number
+  runtime?: number // only for movies
+  seasons?: Season[] // only for TV shows
+  players?: Player[] | null // Only for movies
+}
+type Season = {
+  seasonNumber: number
+  episodesCount: number
+  poster: string
+}
+
+/api/media/search?q={query}&page={page}
+type SearchResponse = {
+  page: number
+  totalPages: number
+  totalResults: number
+  results: Media[]
+}
+
+/api/media/trending
+/api/media/popular
+Returns movies and TV shows of a specific genre.
+
+/api/media/genres
+type GenresResponse = {
+  genres: { id: number; name: string }[]
+}
+
+/api/seasons/:mediaId
+type SeasonsResponse = {
+  mediaId: number
+  seasons: Season[]
+}
+
+/api/seasons/:mediaId/:seasonNumber
+type SeasonDetails = {
+  seasonNumber: number
+  episodesCount: number
+  poster: string
+  episodes: Episode[]
+}
+type Episode = {
+  id: number
+  episodeNumber: number
+  title: string
+  overview: string
+  duration: number
+}
+
+
+/api/episodes/:mediaId/:seasonNumber
+/api/seasons/:mediaId/:seasonNumber
+ Returns all episodes of a season.
+
+/api/episodes/:mediaId/:seasonNumber/:episodeNumber
+type EpisodeDetails = {
+  id: number
+  episodeNumber: number
+  title: string
+  overview: string
+  duration: number
+  releaseDate: string
+}
+
+/api/players/:episodeId
+type PlayerResponse = {
+  episodeId: number
+  sources: { url: string; quality: '360p' | '480p' | '720p' | '1080p' }[]
+}
