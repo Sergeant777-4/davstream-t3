@@ -50,9 +50,14 @@ const WatchPage = async ({ searchParams }: Props) => {
         </Card>
 
         <ul className="grid grid-cols-[repeat(auto-fill,minmax(6rem,1fr))] flex-wrap gap-2">
-          <Button asChild variant={"outline"} size={"sm"}>
-            <a href={extracted.url}>Telecharger</a>
-          </Button>
+          {extracted.type === "direct" && (
+            <Button asChild variant={"outline"} size={"sm"}>
+              <a href={extracted.url} download={true}>
+                Telecharger
+              </a>
+            </Button>
+          )}
+
           {players.map((item, index) => (
             <Button
               asChild
