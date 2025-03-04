@@ -24,8 +24,6 @@ const WatchPage = async ({ searchParams }: Props) => {
   if (!player) notFound();
 
   const extracted = await getDirectLink(player.url);
-  // const players = await playerAction.getDirectLinks({ mediaId: media.id });
-  // const player = players?.[valid.data.player];
   // TODO: DELETE VIDSTACK
 
   return (
@@ -34,10 +32,7 @@ const WatchPage = async ({ searchParams }: Props) => {
         {extracted.type === "iframe" ? (
           <iframe src={player.url}></iframe>
         ) : (
-          <>
-            {/* <video src={player.url} controls></video> */}
-            <Player data={extracted} />
-          </>
+          <Player data={extracted} />
         )}
       </div>
 

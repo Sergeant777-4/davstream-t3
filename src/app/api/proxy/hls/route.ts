@@ -44,14 +44,17 @@ export const GET = async (request: NextRequest) => {
     const res = await fetch(url, {
       ...request,
       headers: {
-        ...request.headers,
+        Host: baseUrl.origin,
         Referer: ref,
         Origin: ref,
-        Host: baseUrl.host,
-        // ...headers,
       },
       cache: "no-cache",
+      next: { revalidate: 1 },
+      keepalive: true,
+      mode: "no-cors",
+      referrer: ref,
     });
+
     const data = await res.text();
     if (data.includes("403 Forbidden")) throw new Error("403 Forbidden");
 
