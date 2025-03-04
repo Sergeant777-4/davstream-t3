@@ -43,7 +43,7 @@ export const GET = async (request: NextRequest) => {
       headers: proxyHeaders,
       keepalive: true,
       cache: "no-cache",
-      mode: "no-cors",
+      // mode: "no-cors",
       referrer: ref,
     });
 
