@@ -24,9 +24,9 @@ export default function RootLayout({
   return (
     <html
       lang="fr"
-      className={`dark min-h-svh w-screen overflow-x-hidden ${fontSans.variable}`}
+      className={`dark w-screen overflow-x-hidden ${fontSans.variable}`}
     >
-      <body className="flex flex-col">
+      <body className="flex min-h-svh flex-col">
         <NextTopLoader />
         <Navbar />
         {children}

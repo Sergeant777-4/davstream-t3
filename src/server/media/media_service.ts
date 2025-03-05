@@ -1,4 +1,4 @@
-import type { Prisma, TypeEnum } from "@prisma/client";
+import type { CategoryEnum, Prisma, TypeEnum } from "@prisma/client";
 import { db } from "~/server/db";
 
 export type MediaSelectType = Prisma.MediaGetPayload<{
@@ -122,8 +122,27 @@ class MediaService {
       skip: (page - 1) * limit,
       take: limit,
     });
-
     return { populars, totalResults };
+  };
+
+  getByCategory = async ({
+    limit,
+    page,
+    category,
+  }: {
+    category: CategoryEnum;
+    limit: number;
+    page: number;
+  }) => {
+    const totalResults = await this.count();
+    const results = await db.media.findMany({
+      orderBy: [{ releaseDate: "desc" }, { popularity: "desc" }],
+      select: this.mediaSelect,
+      skip: (page - 1) * limit,
+      where: { category },
+      take: limit,
+    });
+    return { results, totalResults };
   };
 
   delete = async ({ tmdbId, type }: { tmdbId: number; type: TypeEnum }) => {

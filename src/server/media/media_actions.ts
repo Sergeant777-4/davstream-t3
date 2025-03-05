@@ -1,4 +1,5 @@
 "use server";
+import type { CategoryEnum } from "@prisma/client";
 import * as z from "zod";
 import mediaService from "~/server/media/media_service";
 
@@ -62,6 +63,24 @@ export const getTrending = async (payload?: {
   const totalPages = Math.floor(totalResults / valid.limit);
 
   return { page: valid.page, totalPages, totalResults, results: trending };
+};
+
+export const getByCategory = async (payload: {
+  category: CategoryEnum;
+  page?: number;
+  limit?: number;
+}) => {
+  const schema = z.object({
+    category: z.enum(["ANIME", "CARTOON", "KDRAMA", "DOCUMENTARY"]),
+    page: z.coerce.number().int().min(1).optional().default(1),
+    limit: z.coerce.number().int().min(1).max(30).optional().default(25),
+  });
+
+  const valid = schema.parse(payload || {});
+  const { results, totalResults } = await mediaService.getByCategory(valid);
+  const totalPages = Math.floor(totalResults / valid.limit);
+
+  return { page: valid.page, totalPages, totalResults, results };
 };
 
 export const getMediaDetails = async (id: number) => {

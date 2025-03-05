@@ -10,7 +10,7 @@ const MediaCard = ({ data }: Props) => {
   return (
     <Link
       prefetch={false}
-      className="group flex flex-col gap-1 rounded-md outline-none ring-ring focus-visible:ring-1"
+      className="group flex w-full flex-col gap-1 rounded-md outline-none ring-ring focus-visible:ring-1"
       href={`/watch?id=${data.id}&type=${data.type}`}
     >
       <figure className="aspect-[3/4.5] w-full overflow-hidden rounded-md transition-all group-hover:-translate-y-1 group-focus:-translate-y-1">
