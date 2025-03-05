@@ -174,11 +174,9 @@ const WatchPage = async ({ searchParams }: Props) => {
         <div className="flex flex-col gap-2">
           <p className="font-medium">Collection</p>
           <Suspense fallback="loading">
-            <>
-              {media.collection?.media.map((item) => (
-                <MediaHCard media={item} key={item.id} />
-              ))}
-            </>
+            {media.collection?.media.map((item) => (
+              <MediaHCard media={item} key={item.id} />
+            ))}
           </Suspense>
         </div>
       </aside>

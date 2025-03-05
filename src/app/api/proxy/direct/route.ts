@@ -44,10 +44,7 @@ export const GET = async (request: NextRequest) => {
       referrer: ref,
     });
 
-    return new Response(res.body, {
-      status: 206,
-      headers: Object.fromEntries(res.headers.entries()),
-    });
+    return res;
   } catch (error) {
     return Response.json({ error }, { status: 500 });
   }
