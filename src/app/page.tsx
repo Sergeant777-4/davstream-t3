@@ -2,7 +2,7 @@ import MediaCard from "~/components/MediaCard";
 import { getPopular } from "~/server/media/media_actions";
 
 const Home = async () => {
-  const data = await getPopular();
+  const data = await getPopular({ limit: 27 });
 
   return (
     <main className="container py-2">

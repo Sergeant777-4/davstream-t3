@@ -1,7 +1,6 @@
-// Database configuration
 generator client {
     provider        = "prisma-client-js"
-    previewFeatures = ["nativeDistinct", "postgresqlExtensions"]
+    previewFeatures = ["nativeDistinct", "postgresqlExtensions", "driverAdapters"]
 }
 
 datasource db {

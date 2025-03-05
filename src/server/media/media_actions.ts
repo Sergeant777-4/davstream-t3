@@ -32,7 +32,10 @@ export const getSimilars = async (id: number) => {
   return { ...media, similars };
 };
 
-export const getPopular = async (payload?: { page: number; limit: number }) => {
+export const getPopular = async (payload?: {
+  page?: number;
+  limit?: number;
+}) => {
   const schema = z.object({
     page: z.coerce.number().int().min(1).default(1),
     limit: z.coerce.number().int().min(1).max(30).default(25),
@@ -46,8 +49,8 @@ export const getPopular = async (payload?: { page: number; limit: number }) => {
 };
 
 export const getTrending = async (payload?: {
-  page: number;
-  limit: number;
+  page?: number;
+  limit?: number;
 }) => {
   const schema = z.object({
     page: z.coerce.number().int().min(1).optional().default(1),
