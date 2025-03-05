@@ -14,8 +14,6 @@ export const GET = async (request: NextRequest) => {
     const baseUrl = new URL(url);
     const ref = encodedRef ? decodeURIComponent(encodedRef) : baseUrl.origin;
 
-    await new Promise((res) => setTimeout(res, 300));
-
     const proxyHeaders = {
       dnt: "1",
       accept: "*/*",
