@@ -6,6 +6,7 @@ import * as z from "zod";
 import MediaHCard from "~/components/MediaHCard";
 import Player from "~/components/Player";
 import TrailerPlayer from "~/components/TrailerPlayer";
+import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { Card } from "~/components/ui/card";
 import { cn } from "~/lib/utils";
@@ -80,33 +81,75 @@ const WatchPage = async ({ searchParams }: Props) => {
         </ul>
 
         <Card
-          className="grid grid-cols-1 gap-4 bg-cover bg-center p-4 lg:grid-cols-[200px,1fr]"
+          className="relative grid grid-cols-1 gap-4 bg-cover bg-center p-4 lg:grid-cols-[200px,1fr]"
           style={{
-            backgroundImage: `linear-gradient(to bottom, rgba(0,0,0,1), rgba(0,0,0,.8), rgba(0,0,0,.6)), url(${media.backdropPath})`,
+            backgroundImage: `linear-gradient(to bottom, rgba(0,0,0,.9), rgba(0,0,0,.8)), url(${media.backdropPath})`,
           }}
         >
-          <figure className="aspect-[3/4.5] overflow-hidden rounded-lg">
-            <Image
-              alt=""
-              width={500}
-              height={500}
-              src={media.posterPath || ""}
-              className="size-full object-cover object-center"
-            />
-          </figure>
+          <div className="flex flex-col gap-2">
+            <figure className="aspect-[3/4.5] overflow-hidden rounded-lg">
+              <Image
+                alt=""
+                width={500}
+                height={500}
+                src={media.posterPath || ""}
+                className="size-full object-cover object-center"
+              />
+            </figure>
+
+            <div className="flex flex-col gap-2">
+              <Button variant={"secondary"}>Plus Tard</Button>
+              <Button variant={"secondary"}>Details</Button>
+              <Button variant={"secondary"}>Partager</Button>
+            </div>
+          </div>
 
           <div className="flex flex-col gap-4">
-            <div className="space-y-1">
+            <div className="flex flex-col gap-1">
               <p className="text-2xl font-bold">
                 {media.title} ({media.originalTitle})
               </p>
 
               <p className="text-xs">{media.alternativeTitles}</p>
+
+              <div className="mt-2 flex flex-wrap gap-2">
+                <Badge>{media.releaseDate.getFullYear()}</Badge>
+                {media.category && <Badge>{media.category}</Badge>}
+                <Badge>{media.duration}m</Badge>
+                <Badge>{media.status}</Badge>
+                <Badge>{media.type}</Badge>
+              </div>
             </div>
 
-            <div className="flex flex-col gap-1.5">
+            <div className="flex flex-col gap-1">
               <p className="text-lg font-bold">Description</p>
               <p className="text-sm">{media.overview}</p>
+            </div>
+
+            <div className="flex flex-col gap-1">
+              <p className="text-lg font-bold">Plateformes</p>
+              <div className="grid grid-cols-[repeat(auto-fill,minmax(3rem,1fr))] gap-2">
+                {media.watchProviders.map((item) => (
+                  <Card key={item.id} className="overflow-hidden">
+                    <Image
+                      src={item.logoPath || ""}
+                      alt=""
+                      width={500}
+                      height={500}
+                      className="size-full object-contain object-center"
+                    />
+                  </Card>
+                ))}
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-1">
+              <p className="text-lg font-bold">Genres</p>
+              <div className="flex flex-wrap gap-2">
+                {media.genres.map((item) => (
+                  <Badge key={item.id}>{item.name}</Badge>
+                ))}
+              </div>
             </div>
           </div>
         </Card>
