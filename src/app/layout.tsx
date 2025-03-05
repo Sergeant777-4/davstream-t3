@@ -22,11 +22,8 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html
-      lang="fr"
-      className={`dark min-h-svh w-screen overflow-x-hidden ${fontSans.variable}`}
-    >
-      <body className="flex h-full flex-col">
+    <html lang="fr" className={`dark ${fontSans.variable}`}>
+      <body className="flex h-full min-h-svh w-screen flex-col overflow-x-hidden">
         <NextTopLoader />
         <Navbar />
         {children}
