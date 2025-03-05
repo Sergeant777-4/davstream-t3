@@ -65,6 +65,31 @@ export const getTrending = async (payload?: {
   return { page: valid.page, totalPages, totalResults, results: trending };
 };
 
+export const getMediaByWatchProviders = async (payload: {
+  id: number;
+  page?: number;
+  limit?: number;
+}) => {
+  const schema = z.object({
+    id: z.coerce.number().int().min(1),
+    page: z.coerce.number().int().min(1).optional().default(1),
+    limit: z.coerce.number().int().min(1).max(30).optional().default(25),
+  });
+
+  const valid = schema.parse(payload || {});
+  const { watchProvider, results, totalResults } =
+    await mediaService.getByWatchProviders(valid);
+  const totalPages = Math.floor(totalResults / valid.limit);
+
+  return {
+    page: valid.page,
+    totalPages,
+    totalResults,
+    watchProvider,
+    results: results,
+  };
+};
+
 export const getByCategory = async (payload: {
   category: CategoryEnum;
   page?: number;

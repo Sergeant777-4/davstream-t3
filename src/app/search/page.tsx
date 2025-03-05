@@ -14,7 +14,7 @@ const SearchPage = async ({ searchParams }: Props) => {
   const data = query && (await searchMedia({ query }));
 
   return (
-    <main className="container flex flex-1 flex-col gap-2 py-2">
+    <main className="container flex flex-1 flex-col gap-4 py-4">
       <form action="#">
         <Input
           placeholder="Recherche"

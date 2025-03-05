@@ -125,6 +125,31 @@ class MediaService {
     return { populars, totalResults };
   };
 
+  getByWatchProviders = async ({
+    id,
+    limit,
+    page,
+  }: {
+    id: number;
+    limit: number;
+    page: number;
+  }) => {
+    const totalResults = await this.count();
+    const watchProvider = await db.watchProvider.findUnique({ where: { id } });
+    const results = await db.media.findMany({
+      orderBy: [{ popularity: "desc" }, { releaseDate: "desc" }],
+      where: {
+        watchProviders: {
+          some: { id },
+        },
+      },
+      select: this.mediaSelect,
+      skip: (page - 1) * limit,
+      take: limit,
+    });
+    return { watchProvider, results, totalResults };
+  };
+
   getByCategory = async ({
     limit,
     page,
