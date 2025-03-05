@@ -32,7 +32,6 @@ const Player = ({ data, poster, logoPath }: Props) => {
         },
       }),
       fullscreen: true,
-      setting: true,
       miniProgressBar: true,
       mutex: true,
       backdrop: true,

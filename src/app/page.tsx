@@ -7,7 +7,7 @@ const Home = async () => {
   const cartoonData = await getByCategory({ category: "CARTOON" });
 
   return (
-    <main className="container flex flex-col gap-4 py-4">
+    <main className="container flex-1 flex flex-col gap-4 py-4">
       <div className="space-y-2">
         <p className="text-lg font-bold">Films Tendance</p>
         <MediaCarousel media={popularData.results} />
@@ -22,11 +22,6 @@ const Home = async () => {
         <p className="text-lg font-bold">Films Dessins Animes</p>
         <MediaCarousel media={cartoonData.results} />
       </div>
-      {/* <div className="cartoon-grid">
-        {data.results.map((item) => (
-          <MediaCard key={item.id} data={item} />
-        ))}
-      </div> */}
     </main>
   );
 };

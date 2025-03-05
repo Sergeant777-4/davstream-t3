@@ -42,7 +42,7 @@ const WatchPage = async ({ searchParams }: Props) => {
   const extracted = await getDirectLink(player.url);
 
   return (
-    <main className="container flex flex-col gap-4 py-4 lg:flex-row">
+    <main className="container flex flex-1 flex-col gap-4 py-4 lg:flex-row">
       <section className="flex flex-1 flex-col gap-2">
         <Card className="aspect-video w-full overflow-hidden">
           {extracted.type === "iframe" ? (
