@@ -130,15 +130,17 @@ const WatchPage = async ({ searchParams }: Props) => {
                 <p className="text-lg font-bold">Plateformes</p>
                 <div className="grid grid-cols-[repeat(auto-fill,minmax(3rem,1fr))] gap-2">
                   {media.watchProviders.map((item) => (
-                    <Card key={item.id} className="overflow-hidden">
-                      <Image
-                        src={item.logoPath || ""}
-                        alt=""
-                        width={500}
-                        height={500}
-                        className="size-full object-contain object-center"
-                      />
-                    </Card>
+                    <Link key={item.id} href={`/watchProviders/${item.id}`}>
+                      <Card className="overflow-hidden">
+                        <Image
+                          src={item.logoPath || ""}
+                          alt=""
+                          width={500}
+                          height={500}
+                          className="size-full object-contain object-center"
+                        />
+                      </Card>
+                    </Link>
                   ))}
                 </div>
               </div>
