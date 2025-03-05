@@ -29,6 +29,12 @@ const Navbar = () => {
             </Button>
           </div>
         </div>
+
+        <div>
+          <Button asChild variant={"ghost"}>
+            <Link href={"/search"}>Recherche</Link>
+          </Button>
+        </div>
       </div>
     </nav>
   );

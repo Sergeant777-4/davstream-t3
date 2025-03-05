@@ -73,8 +73,8 @@ export const getMediaDetails = async (id: number) => {
 
 export const searchMedia = async (payload?: {
   query: string;
-  page: number;
-  limit: number;
+  page?: number;
+  limit?: number;
 }) => {
   const schema = z.object({
     query: z.string().min(1),
