@@ -41,7 +41,6 @@ export const GET = async (request: NextRequest) => {
       next: { revalidate: 1 },
       cache: "no-cache",
       keepalive: true,
-      mode: "no-cors",
       referrer: ref,
     });
 

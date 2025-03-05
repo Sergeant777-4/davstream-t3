@@ -41,11 +41,13 @@ export const GET = async (request: NextRequest) => {
       headers: proxyHeaders,
       keepalive: true,
       cache: "no-cache",
-      mode: "no-cors",
       referrer: ref,
     });
 
-    return res;
+    return new Response(res.body, {
+      status: 206,
+      headers: Object.fromEntries(res.headers.entries()),
+    });
   } catch (error) {
     return Response.json({ error }, { status: 500 });
   }
