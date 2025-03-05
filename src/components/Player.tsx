@@ -3,9 +3,9 @@ import { useEffect, useRef } from "react";
 import Artplayer from "artplayer";
 import Hls from "hls.js";
 
-type Props = { data: ExtractedLink; poster: string };
+type Props = { data: ExtractedLink; poster: string; logoPath?: string | null };
 
-const Player = ({ data, poster }: Props) => {
+const Player = ({ data, poster, logoPath }: Props) => {
   const artRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -36,7 +36,6 @@ const Player = ({ data, poster }: Props) => {
       screenshot: true,
       setting: true,
       playbackRate: true,
-      aspectRatio: true,
       miniProgressBar: true,
       mutex: true,
       backdrop: true,
@@ -49,8 +48,7 @@ const Player = ({ data, poster }: Props) => {
       lang: navigator.language.toLowerCase(),
       url: data.url,
       icons: {
-        state:
-          '<img width="150" heigth="150" src="https://artplayer.org/assets/img/state.svg">',
+        state: `<img width="150" heigth="150" src="${logoPath ? logoPath : "https://artplayer.org/assets/img/state.svg"}">`,
         indicator:
           '<img width="16" heigth="16" src="https://artplayer.org/assets/img/indicator.svg">',
       },
@@ -59,7 +57,7 @@ const Player = ({ data, poster }: Props) => {
     return () => {
       if (art?.destroy) art.destroy(false);
     };
-  }, [data.type, data.url, poster]);
+  }, [data.type, data.url, logoPath, poster]);
 
   return (
     <div id="player" ref={artRef} className="relative -z-0 size-full"></div>

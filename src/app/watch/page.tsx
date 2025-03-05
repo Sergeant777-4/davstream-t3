@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
@@ -47,11 +48,15 @@ const WatchPage = async ({ searchParams }: Props) => {
           {extracted.type === "iframe" ? (
             <iframe className="size-full" src={player.url}></iframe>
           ) : (
-            <Player data={extracted} poster={media.backdropPath || ""} />
+            <Player
+              data={extracted}
+              logoPath={media.logoPath}
+              poster={media.backdropPath || ""}
+            />
           )}
         </Card>
 
-        <ul className="grid grid-cols-[repeat(auto-fill,minmax(6rem,1fr))] flex-wrap gap-2">
+        <ul className="flex flex-wrap gap-2">
           {players.map((item, index) => (
             <Button
               asChild
@@ -73,6 +78,38 @@ const WatchPage = async ({ searchParams }: Props) => {
             </Button>
           ))}
         </ul>
+
+        <Card
+          className="grid grid-cols-1 gap-4 bg-cover bg-center p-4 lg:grid-cols-[200px,1fr]"
+          style={{
+            backgroundImage: `linear-gradient(to bottom, rgba(0,0,0,1), rgba(0,0,0,.8), rgba(0,0,0,.6)), url(${media.backdropPath})`,
+          }}
+        >
+          <figure className="aspect-[3/4.5] overflow-hidden rounded-lg">
+            <Image
+              alt=""
+              width={500}
+              height={500}
+              src={media.posterPath || ""}
+              className="size-full object-cover object-center"
+            />
+          </figure>
+
+          <div className="flex flex-col gap-4">
+            <div className="space-y-1">
+              <p className="text-2xl font-bold">
+                {media.title} ({media.originalTitle})
+              </p>
+
+              <p className="text-xs">{media.alternativeTitles}</p>
+            </div>
+
+            <div className="flex flex-col gap-1.5">
+              <p className="text-lg font-bold">Description</p>
+              <p className="text-sm">{media.overview}</p>
+            </div>
+          </div>
+        </Card>
       </section>
 
       <aside className="flex w-full flex-col gap-4 lg:max-w-[350px]">

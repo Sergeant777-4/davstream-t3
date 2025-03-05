@@ -20,13 +20,14 @@ const MediaHCard = ({ media }: Props) => {
             width={500}
             height={500}
             unoptimized
+            className="object-cover object-center"
           />
         </figure>
 
         <div
           className="flex flex-col justify-center gap-1 bg-cover bg-center p-3"
           style={{
-            backgroundImage: `linear-gradient(45deg, rgba(0,0,0,0.995), rgba(0,0,0,0.85), rgba(0,0,0,.7)), url(${media.backdropPath})`,
+            backgroundImage: `linear-gradient(to right, rgba(0,0,0,1), rgba(0,0,0,0.9), rgba(0,0,0,.7)), url(${media.backdropPath})`,
           }}
         >
           <p className="line-clamp-1 text-sm font-medium">{media.title}</p>
