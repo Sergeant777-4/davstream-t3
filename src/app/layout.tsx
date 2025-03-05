@@ -23,7 +23,7 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="fr" className={`dark ${fontSans.variable}`}>
-      <body className="flex h-full min-h-svh w-screen flex-col overflow-x-hidden">
+      <body className="flex min-h-svh w-screen flex-col overflow-x-hidden">
         <NextTopLoader />
         <Navbar />
         {children}
