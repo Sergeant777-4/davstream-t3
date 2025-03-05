@@ -166,19 +166,21 @@ const WatchPage = async ({ searchParams }: Props) => {
           <TrailerPlayer url={media.trailerUrl || ""} />
         </div>
 
+        {media.collection && (
+          <div className="flex flex-col gap-2">
+            <p className="font-medium">Collection</p>
+            <Suspense fallback="loading">
+              {media.collection?.media.map((item) => (
+                <MediaHCard media={item} key={item.id} />
+              ))}
+            </Suspense>
+          </div>
+        )}
+
         <div className="flex flex-col gap-2">
           <p className="font-medium">Recommendations</p>
           <Suspense fallback="loading">
             <Recommendations mediaId={media.id} />
-          </Suspense>
-        </div>
-
-        <div className="flex flex-col gap-2">
-          <p className="font-medium">Collection</p>
-          <Suspense fallback="loading">
-            {media.collection?.media.map((item) => (
-              <MediaHCard media={item} key={item.id} />
-            ))}
           </Suspense>
         </div>
       </aside>
