@@ -181,13 +181,6 @@ const WatchPage = async ({ searchParams }: Props) => {
             </>
           </Suspense>
         </div>
-
-        {/* <div className="flex flex-col gap-2">
-          <p className="font-medium">Similars</p>
-          <Suspense fallback="loading">
-            <Similars mediaId={media.id} />
-          </Suspense>
-        </div> */}
       </aside>
     </main>
   );
@@ -203,16 +196,5 @@ const Recommendations = async ({ mediaId }: { mediaId: number }) => {
     </>
   );
 };
-
-// const Similars = async ({ mediaId }: { mediaId: number }) => {
-//   const data = await getSimilars(mediaId);
-//   return (
-//     <>
-//       {data.similars.map((item) => (
-//         <MediaHCard media={item} key={item.id} />
-//       ))}
-//     </>
-//   );
-// };
 
 export default WatchPage;
