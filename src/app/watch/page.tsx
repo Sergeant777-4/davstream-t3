@@ -13,7 +13,6 @@ import { cn } from "~/lib/utils";
 import {
   getMediaDetails,
   getRecommendations,
-  getSimilars,
 } from "~/server/media/media_actions";
 import { getDirectLink } from "~/server/player/player_actions";
 import playerService from "~/server/player/player_service";
@@ -126,31 +125,35 @@ const WatchPage = async ({ searchParams }: Props) => {
               <p className="text-sm">{media.overview}</p>
             </div>
 
-            <div className="flex flex-col gap-1">
-              <p className="text-lg font-bold">Plateformes</p>
-              <div className="grid grid-cols-[repeat(auto-fill,minmax(3rem,1fr))] gap-2">
-                {media.watchProviders.map((item) => (
-                  <Card key={item.id} className="overflow-hidden">
-                    <Image
-                      src={item.logoPath || ""}
-                      alt=""
-                      width={500}
-                      height={500}
-                      className="size-full object-contain object-center"
-                    />
-                  </Card>
-                ))}
+            {media.watchProviders.length > 0 && (
+              <div className="flex flex-col gap-1">
+                <p className="text-lg font-bold">Plateformes</p>
+                <div className="grid grid-cols-[repeat(auto-fill,minmax(3rem,1fr))] gap-2">
+                  {media.watchProviders.map((item) => (
+                    <Card key={item.id} className="overflow-hidden">
+                      <Image
+                        src={item.logoPath || ""}
+                        alt=""
+                        width={500}
+                        height={500}
+                        className="size-full object-contain object-center"
+                      />
+                    </Card>
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
 
-            <div className="flex flex-col gap-1">
-              <p className="text-lg font-bold">Genres</p>
-              <div className="flex flex-wrap gap-2">
-                {media.genres.map((item) => (
-                  <Badge key={item.id}>{item.name}</Badge>
-                ))}
+            {media.genres.length > 0 && (
+              <div className="flex flex-col gap-1">
+                <p className="text-lg font-bold">Genres</p>
+                <div className="flex flex-wrap gap-2">
+                  {media.genres.map((item) => (
+                    <Badge key={item.id}>{item.name}</Badge>
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </Card>
       </section>
@@ -169,11 +172,22 @@ const WatchPage = async ({ searchParams }: Props) => {
         </div>
 
         <div className="flex flex-col gap-2">
+          <p className="font-medium">Collection</p>
+          <Suspense fallback="loading">
+            <>
+              {media.collection?.media.map((item) => (
+                <MediaHCard media={item} key={item.id} />
+              ))}
+            </>
+          </Suspense>
+        </div>
+
+        {/* <div className="flex flex-col gap-2">
           <p className="font-medium">Similars</p>
           <Suspense fallback="loading">
             <Similars mediaId={media.id} />
           </Suspense>
-        </div>
+        </div> */}
       </aside>
     </main>
   );
@@ -190,15 +204,15 @@ const Recommendations = async ({ mediaId }: { mediaId: number }) => {
   );
 };
 
-const Similars = async ({ mediaId }: { mediaId: number }) => {
-  const data = await getSimilars(mediaId);
-  return (
-    <>
-      {data.similars.map((item) => (
-        <MediaHCard media={item} key={item.id} />
-      ))}
-    </>
-  );
-};
+// const Similars = async ({ mediaId }: { mediaId: number }) => {
+//   const data = await getSimilars(mediaId);
+//   return (
+//     <>
+//       {data.similars.map((item) => (
+//         <MediaHCard media={item} key={item.id} />
+//       ))}
+//     </>
+//   );
+// };
 
 export default WatchPage;

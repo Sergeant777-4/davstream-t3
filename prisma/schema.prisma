@@ -221,5 +221,5 @@ model Collection {
     posterPath   String
     backdropPath String
 
-    parts Media[]
+    media Media[]
 }

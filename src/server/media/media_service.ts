@@ -64,7 +64,9 @@ class MediaService {
       where: { id },
       include: {
         watchProviders: true,
-        collection: true,
+        collection: {
+          select: { media: true },
+        },
         players: true,
         seasons: true,
         genres: true,
